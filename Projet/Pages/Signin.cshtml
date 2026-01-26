@@ -1,0 +1,52 @@
+﻿@page
+@model Projet.Pages.SignInModel
+@{
+}
+
+
+<div class="signin-container">
+    <div class="signin-left">
+        <img src="~/images/logo-raedeef.png" alt="Logo RADEEF" class="signin-logo" />
+        <h2 class="signin-title">Bienvenue de retour !</h2>
+        <p class="signin-subtitle">Connectez-vous pour accéder à votre espace.</p>
+
+        <form method="post" novalidate>
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="signin-error">@Model.ErrorMessage</div>
+            }
+
+            <div class="signin-group mb-3">
+                <label asp-for="Input.Username" class="signin-label">Nom d'utilisateur</label>
+                <input asp-for="Input.Username" class="signin-input" placeholder="Entrez votre nom d'utilisateur" />
+                <span asp-validation-for="Input.Username" class="signin-validation"></span>
+            </div>
+
+            <div class="signin-group mb-3">
+                <label asp-for="Input.Password" class="signin-label">Mot de passe</label>
+                <input asp-for="Input.Password" type="password" class="signin-input" placeholder="Votre mot de passe" />
+                <span asp-validation-for="Input.Password" class="signin-validation"></span>
+            </div>
+
+            <div class="signin-check mb-3">
+                <input type="checkbox" id="keepLogged" class="signin-checkbox" />
+                <label for="keepLogged" class="signin-check-label">Se souvenir de moi</label>
+            </div>
+
+            <button type="submit" class="signin-btn">Se connecter</button>
+
+            <div class="signin-links mt-3">
+                <a href="/ForgotPassword" class="signin-link">Mot de passe oublié ?</a>
+                <a href="/Registration" class="signin-link">Créer un compte</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="signin-right">
+        <img src="~/images/illustration-signin.png" alt="Illustration" class="signin-img" />
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
