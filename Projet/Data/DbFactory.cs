@@ -1,23 +1,17 @@
-﻿using System;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
 namespace Projet.Data
 {
     public class DbFactory
     {
-        private readonly string _connectionString;
+        private static readonly string connectionString =
+            @"Data Source=(LocalDB)\MSSQLLocalDB;
+              AttachDbFilename=C:\Users\HP\OneDrive\Documents\ESISA\4eme_annee\S7\Eng_logiciel\Projet\Projet\Data\PRJT.mdf;
+              Integrated Security=True";
 
-        public DbFactory(IConfiguration configuration)
+        public static SqlConnection GetConnection()
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' introuvable dans la configuration.");
-        }
-
-        // Retourne une nouvelle connexion non ouverte ; l'appelant doit Open/Close
-        public SqlConnection CreateConnection()
-        {
-            return new SqlConnection(_connectionString);
+            return new SqlConnection(connectionString);
         }
     }
 }

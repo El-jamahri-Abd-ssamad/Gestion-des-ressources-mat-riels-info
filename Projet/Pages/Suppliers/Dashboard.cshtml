@@ -1,0 +1,21 @@
+@page
+@model Projet.Pages.Suppliers.DashboardModel
+
+<h2>Mes offres</h2>
+
+<table class="table table-striped">
+    <tr>
+        <th>Appel d’offre</th>
+        <th>Prix</th>
+        <th>Statut</th>
+    </tr>
+
+    @foreach (var o in Model.Offers)
+    {
+        <tr>
+            <td>@o.TenderId</td>
+            <td>@o.TotalPrice</td>
+            <td>@o.Status</td>
+        </tr>
+    }
+</table>

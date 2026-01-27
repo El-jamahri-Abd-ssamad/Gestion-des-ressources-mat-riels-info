@@ -32,8 +32,15 @@ namespace Projet.Pages
                 // Redirection selon le rôle
                 if (user.Username.ToLower() == "admin")
                     return RedirectToPage("ListUsers");
-                else
-                    return RedirectToPage("Welcome");
+                else if (user.Username.ToLower() == "fournisseur")
+                    return RedirectToPage("/Suppliers/Dashboard");
+                else if (user.Username.ToLower() == "responsableressources")
+                    return RedirectToPage("/Tenders/Index");
+                return RedirectToPage("/Tenders/Index");
+                
+
+               
+
             }
             else
             {
