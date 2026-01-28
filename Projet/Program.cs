@@ -3,6 +3,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Register maintenance (Dev 5) service
+builder.Services.AddScoped<Projet.Services.IFaultService, Projet.Services.FaultService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

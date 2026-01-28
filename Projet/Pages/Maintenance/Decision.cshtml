@@ -1,0 +1,32 @@
+@page
+@model Projet.Pages.Maintenance.DecisionModel
+
+<h2>Décision du responsable</h2>
+
+@if (Model.Report == null)
+{
+    <p>Constat introuvable.</p>
+}
+else
+{
+    <p>Intervention: @Model.Report.IdIntervention</p>
+    <p>Description: @Model.Report.DetailedDescription</p>
+    <p>Nature: @Model.Report.Nature</p>
+    <p>Fréquence: @Model.Report.Frequency</p>
+
+    <form method="post">
+        <input asp-for="Report.Id" type="hidden" />
+        <div>
+            <label>Décision</label>
+            <select asp-for="Decision">
+                <option value="RepairAtSupplier">Réparation chez le fournisseur</option>
+                <option value="Replace">Remplacement</option>
+            </select>
+        </div>
+        <div>
+            <label>Commentaires</label>
+            <textarea asp-for="Comments"></textarea>
+        </div>
+        <button type="submit">Enregistrer décision</button>
+    </form>
+}

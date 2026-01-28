@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isMaintenance = Context.Request.Path.StartsWithSegments("/Maintenance");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -32,6 +36,20 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
+
+                        <!-- Liens de test pour le module Maintenance (Dev 5) -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Maintenance/DeclareFault">Déclarer une panne</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Maintenance/ListFaults">Liste des pannes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Maintenance/ViewReports">Constats techniques</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Maintenance/CreateReport">Rédiger constat (test)</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -43,6 +61,16 @@
             <a asp-page="/Tenders/Index">Appels d’offres</a>
             <a asp-page="/Suppliers/Dashboard">Dashboard</a>
 
+            <!-- Liens supplémentaires pour test rapide -->
+            <div class="mt-3">
+                <strong>Maintenance (tests rapides) :</strong>
+                <ul>
+                    <li><a asp-page="/Maintenance/DeclareFault">Déclarer une panne</a></li>
+                    <li><a asp-page="/Maintenance/ListFaults">Voir toutes les pannes</a></li>
+                    <li><a asp-page="/Maintenance/ViewReports">Voir constats techniques</a></li>
+                    <li><a asp-page="/Maintenance/CreateReport">Créer un constat (test)</a></li>
+                </ul>
+            </div>
         </main>
     </div>
 

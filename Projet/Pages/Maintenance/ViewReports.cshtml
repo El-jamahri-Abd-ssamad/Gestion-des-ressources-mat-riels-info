@@ -1,0 +1,20 @@
+@page
+@model Projet.Pages.Maintenance.ViewReportsModel
+
+<h2>Constats techniques reçus</h2>
+
+<table>
+    <thead><tr><th>Id</th><th>Intervention</th><th>Nature</th><th>Fréquence</th><th>Actions</th></tr></thead>
+    <tbody>
+        @foreach (var r in Model.Reports)
+        {
+            <tr>
+                <td>@r.Id</td>
+                <td>@r.IdIntervention</td>
+                <td>@r.Nature</td>
+                <td>@r.Frequency</td>
+                <td><a asp-page="./Decision" asp-route-reportId="@r.Id">Décider</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

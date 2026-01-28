@@ -1,0 +1,32 @@
+@page
+@model Projet.Pages.Maintenance.CreateReportModel
+
+<h2>Rédiger le constat technique</h2>
+
+<form method="post">
+    <input asp-for="Report.IdIntervention" type="hidden" />
+    <div>
+        <label>Description détaillée</label>
+        <textarea asp-for="Report.DetailedDescription"></textarea>
+    </div>
+    <div>
+        <label>Date d'apparition</label>
+        <input asp-for="Report.DateOccurred" type="date" />
+    </div>
+    <div>
+        <label>Fréquence</label>
+        <select asp-for="Report.Frequency">
+            <option>Rare</option>
+            <option>Frequent</option>
+            <option>Permanent</option>
+        </select>
+    </div>
+    <div>
+        <label>Nature</label>
+        <select asp-for="Report.Nature">
+            <option>Hardware</option>
+            <option>Software</option>
+        </select>
+    </div>
+    <button type="submit">Envoyer au responsable</button>
+</form>
