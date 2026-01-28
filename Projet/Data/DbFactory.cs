@@ -1,5 +1,4 @@
-using Microsoft.Data.SqlClient;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 
 namespace Projet.Data
 {
@@ -7,7 +6,7 @@ namespace Projet.Data
     {
         private static readonly string connectionString =
             @"Data Source=(LocalDB)\MSSQLLocalDB;
-              AttachDbFilename=C:\Users\HP\OneDrive\Documents\ESISA\4eme_annee\S7\Eng_logiciel\Projet\Projet\Data\PRJT.mdf;
+              AttachDbFilename=C:\USERS\HP\ONEDRIVE\DOCUMENTS\ESISA\4EME_ANNEE\S7\ENG_LOGICIEL\PROJET\PROJET\DATA\PRJT.MDF;
               Integrated Security=True";
 
         public static SqlConnection GetConnection()

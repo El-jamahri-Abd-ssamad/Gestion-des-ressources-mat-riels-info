@@ -5,7 +5,7 @@ using Projet.Services;
 
 namespace Projet.Pages.Tenders
 {
-   public class CreateModel : PageModel
+    public class CreateModel : PageModel
     {
         [BindProperty]
         public TenderDto Tender { get; set; }
@@ -24,13 +24,21 @@ namespace Projet.Pages.Tenders
             if (!ModelState.IsValid)
             {
                 Console.WriteLine("MODEL STATE INVALID");
+
+                foreach (var entry in ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        Console.WriteLine($"ERROR {entry.Key} : {error.ErrorMessage}");
+                    }
+                }
+
                 return Page();
             }
 
-            // ⚠️ TEST LOG
-            Console.WriteLine("TITLE = " + Tender.Title);
-
-            service.CreateTender(Tender, 1); // 1 = CreatedBy (temporaire)
+            // ✅ ICI LA CRÉATION (IL MANQUAIT CETTE PARTIE)
+            Console.WriteLine("CREATING TENDER...");
+            service.CreateTender(Tender, 1); // userId = 1 (temp)
 
             Console.WriteLine("INSERT DONE");
 

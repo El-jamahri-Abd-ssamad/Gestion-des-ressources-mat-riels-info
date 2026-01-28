@@ -23,8 +23,10 @@ namespace Projet.Services
                     Title = t.Title,
                     Description = t.Description,
                     StartDate = t.StartDate,
-                    EndDate = t.EndDate
+                    EndDate = t.EndDate,
+                    Status = t.Status
                 });
+
             }
             return result;
         }
@@ -40,11 +42,13 @@ namespace Projet.Services
                 Title = t.Title,
                 Description = t.Description,
                 StartDate = t.StartDate,
-                EndDate = t.EndDate
+                EndDate = t.EndDate,
+                Status = t.Status
             };
+
         }
 
-       
+
 
         public void CreateTender(TenderDto dto, int createdBy)
         {
@@ -54,9 +58,10 @@ namespace Projet.Services
                 Description = dto.Description,
                 StartDate = dto.StartDate.Value,
                 EndDate = dto.EndDate.Value,
-                Status = TenderStatus.Open,
+                Status = TenderStatus.Open, // forcé côté backend
                 CreatedBy = createdBy
             };
+
 
             dao.Insert(t);
         }

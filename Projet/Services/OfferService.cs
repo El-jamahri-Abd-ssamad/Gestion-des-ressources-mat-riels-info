@@ -17,11 +17,14 @@ namespace Projet.Services
                 IdTender = dto.TenderId,
                 IdSupplier = Idsupplier,
                 TotalPrice = dto.TotalPrice,
-                Status = OfferStatus.Submitted
+                WarrantyMonths = dto.WarrantyMonths,   
+                Status = OfferStatus.Submitted,
+                SubmissionDate = DateTime.Now     
             };
 
             dao.Insert(o);
         }
+
 
         public List<OfferDto> GetOffersBySupplier(int supplierId)
         {
