@@ -1,0 +1,24 @@
+@page "{userId?}"
+@model Projet.Pages.Maintenance.DeclareFaultModel
+
+<h2>Déclarer une panne</h2>
+
+<form method="post">
+    <input asp-for="Fault.DeclaredBy" type="hidden" />
+    <div>
+        <label>Ressource</label>
+        <select asp-for="Fault.IdResource" asp-items="Model.ResourceSelect">
+            <option value="">-- Sélectionnez --</option>
+        </select>
+    </div>
+    <div>
+        <label>Description</label>
+        <textarea asp-for="Fault.Description"></textarea>
+    </div>
+    <button type="submit">Déclarer</button>
+</form>
+
+@if (Model.Message != null)
+{
+    <p>@Model.Message</p>
+}

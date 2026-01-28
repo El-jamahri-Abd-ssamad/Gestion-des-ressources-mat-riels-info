@@ -6,8 +6,13 @@ namespace Projet.Data
     {
         private static readonly string connectionString =
             @"Data Source=(LocalDB)\MSSQLLocalDB;
-              AttachDbFilename=C:\USERS\HP\ONEDRIVE\DOCUMENTS\ESISA\4EME_ANNEE\S7\ENG_LOGICIEL\PROJET\PROJET\DATA\PRJT.MDF;
-              Integrated Security=True";
+              Initial Catalog=PRJT;
+              Integrated Security=True;
+              Connect Timeout=30;
+              Encrypt=True;
+              TrustServerCertificate=False;
+              ApplicationIntent=ReadWrite;
+              MultiSubnetFailover=False";
 
         public static SqlConnection GetConnection()
         {

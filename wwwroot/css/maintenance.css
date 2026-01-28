@@ -1,0 +1,106 @@
+/* Styles spécifiques au module Maintenance */
+body.maintenance {
+    background: #f8fafc;
+    color: #1f2937;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Conteneur principal */
+body.maintenance .container {
+    max-width: 1100px;
+}
+
+/* Titres */
+body.maintenance h2 {
+    color: #0f172a;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border-left: 4px solid #0ea5a4;
+    padding-left: 0.75rem;
+}
+
+/* Formulaires */
+body.maintenance form {
+    background: #ffffff;
+    border: 1px solid #e6eef2;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    margin-bottom: 1rem;
+}
+
+body.maintenance label {
+    font-weight: 500;
+    color: #0f172a;
+}
+
+body.maintenance input[type="text"],
+body.maintenance input[type="date"],
+body.maintenance textarea,
+body.maintenance select {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    margin-top: 0.35rem;
+    margin-bottom: 0.75rem;
+    background: #fff;
+}
+
+/* Boutons */
+body.maintenance .btn {
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+}
+body.maintenance .btn-primary {
+    background: linear-gradient(180deg,#0ea5a4,#08908a);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(8, 144, 138, 0.15);
+}
+
+/* Messages */
+body.maintenance .message {
+    padding: 0.75rem 1rem;
+    background: #ecfeff;
+    border: 1px solid #c7f9f6;
+    color: #064e47;
+    border-radius: 6px;
+    margin-top: 0.75rem;
+}
+
+/* Table liste de pannes */
+body.maintenance table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e6eef2;
+    border-radius: 6px;
+    overflow: hidden;
+}
+body.maintenance th, body.maintenance td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: left;
+}
+body.maintenance thead {
+    background: #f1f5f9;
+}
+body.maintenance tbody tr:hover {
+    background: #fbfdff;
+}
+
+/* Carte résumé panne */
+.fault-card {
+    border-left: 4px solid #f59e0b;
+    background: #fff7ed;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    body.maintenance .container { padding: 0 0.5rem; }
+    body.maintenance th, body.maintenance td { padding: 0.5rem; font-size: 0.95rem; }
+}
