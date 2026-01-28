@@ -1,4 +1,4 @@
-﻿using Projet.Domain;
+﻿using Projet.Domain.Enums;
 
 namespace Projet.Models
 {

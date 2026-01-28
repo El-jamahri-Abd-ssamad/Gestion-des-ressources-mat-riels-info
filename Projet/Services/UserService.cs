@@ -73,7 +73,7 @@ namespace Projet.Services
                     Email = user.Email,
                     Phone = user.Phone,
                     DateBirth = user.DateBirth,
-                    Account = new Account { Username = user.Username, Password = user.Password, Role = user.Role}
+                    Account = new Account { Username = user.Username, Password = user.Password, Role = user.Role }
                 };
 
                 userDao.AddUser(u2); //appel au DAO pour ajouter l'utilisateur
@@ -85,6 +85,18 @@ namespace Projet.Services
         public bool UpdateUser(UserDto olduser, UserDto newUser)
         {
             throw new NotImplementedException();
+        }
+        public User Login(string username, string password)
+        {
+            User user = userDao.GetUser(username);
+
+            if (user == null)
+                return null;
+
+            if (user.Account.Password != password)
+                return null;
+
+            return user;
         }
     }
 }

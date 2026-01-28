@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Projet.Domain;
+
 using Projet.Models;
 using Projet.Services;
+using Projet.Security;
+using Projet.Domain.Enums;
+using AppContext = Projet.Security.AppContext;
+using Projet.Domain;
 
 namespace Projet.Pages
 {
@@ -11,43 +15,40 @@ namespace Projet.Pages
         [BindProperty]
         public UserDto Input { get; set; }   // Username et Password
 
-        public string ErrorMessage { get; set; }   // message affiché en cas d'erreur
+        public string ErrorMessage { get; set; }
 
-        IUserService service = new UserService();  // service métier
+        IUserService service = new UserService();
 
         public void OnGet()
         {
-            // affichage initial
         }
 
         public IActionResult OnPost()
         {
-            // Récupère l'utilisateur par username
-            UserDto user = service.GetUser(Input.Username);
+            // récupérer l'utilisateur depuis la DB
+            User user = service.Login(Input.Username, Input.Password);
 
-            if (user != null && user.Password == Input.Password)
+            if (user == null)
             {
-                Console.WriteLine("Authentification réussie !");
-
-                // Redirection selon le rôle
-                if (user.Username.ToLower() == "admin")
-                    return RedirectToPage("ListUsers");
-                else if (user.Username.ToLower() == "fournisseur")
-                    return RedirectToPage("/Suppliers/Dashboard");
-                else if (user.Username.ToLower() == "responsableressources")
-                    return RedirectToPage("/Tenders/Index");
-                return RedirectToPage("/Tenders/Index");
-                
-
-               
-
-            }
-            else
-            {
-                ErrorMessage = "Authentification échouée, nom d'utilisateur ou mot de passe incorrect.";
-                Console.WriteLine("Authentification échouée !");
+                ErrorMessage = "Nom d'utilisateur ou mot de passe incorrect.";
                 return Page();
             }
+
+            // ?? Stockage global (sans session)
+            AppContext.Username = user.Account.Username;
+            AppContext.Role = (Role)user.Account.Role;
+
+            Console.WriteLine($"Utilisateur connecté : {AppContext.Username} | RôleId={(int)AppContext.Role} | RôleEnum={AppContext.Role}");
+            // ?? Redirection selon le rôle
+            return AppContext.Role switch
+            {
+                Role.Admin => RedirectToPage("/Admin/Dashboard"),
+                Role.ChefDepartement => RedirectToPage("/ChefDepartement/Index"),
+                Role.Enseignant => RedirectToPage("/Enseignant/Dashboard"),
+                Role.Fournisseur => RedirectToPage("/Suppliers/Dashboard"),
+                Role.Technicien => RedirectToPage("/Maintenance/CreateReport"),
+                _ => RedirectToPage("/Welcome")
+            };
         }
     }
 }

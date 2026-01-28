@@ -1,4 +1,5 @@
-﻿using Projet.Models;
+﻿using Projet.Domain;
+using Projet.Models;
 
 namespace Projet.Services
 {
@@ -9,5 +10,6 @@ namespace Projet.Services
         bool DeleteUser(string username);
         List<UserDto> GetUsers();
         bool UpdateUser(UserDto olduser, UserDto newUser);
+        User Login(string username, string password);
     }
 }

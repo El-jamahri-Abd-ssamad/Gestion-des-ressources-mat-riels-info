@@ -1,5 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using Projet.Domain;
+using Projet.Domain.Enums;
+using System;
+using System.Collections.Generic;
 
 namespace Projet.Data
 {
@@ -16,7 +19,7 @@ namespace Projet.Data
                                  "VALUES (@Username,@Password,@Role)";
             command.Parameters.AddWithValue("@Username", user.Account.Username);
             command.Parameters.AddWithValue("@Password", user.Account.Password);
-            command.Parameters.AddWithValue("@Role", user.Account.Role);
+            command.Parameters.AddWithValue("@Role", (int)user.Account.Role);
             command.ExecuteNonQuery();
             command.Parameters.Clear(); //effacer les paramètres précédents
 
@@ -62,7 +65,8 @@ namespace Projet.Data
                     Account = new Account
                     {
                         Username = rd["Username"].ToString(),
-                        Password = rd["Password"].ToString()
+                        Password = rd["Password"].ToString(),
+                        Role = (Role)Convert.ToInt32(rd["Role"])  // <-- ici on convertit int -> enum
                     }
                 };
 
@@ -99,7 +103,7 @@ namespace Projet.Data
                     {
                         Username = rd["Username"].ToString(),
                         Password = rd["Password"].ToString(),
-                        Role = (Role)rd["Role"]
+                        Role = (Role)Convert.ToInt32(rd["Role"])
                     }
                 };
                 liste.Add(user);
@@ -114,5 +118,22 @@ namespace Projet.Data
         {
             throw new NotImplementedException();
         }
+        public int GetUserIdByUsername(string username)
+        {
+            using (SqlConnection connection = DbFactory.GetConnection())
+            {
+                connection.Open();
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText =
+                        "SELECT a.Id FROM Account a WHERE a.Username = @Username";
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    var result = command.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
+        }
     }
+
 }
