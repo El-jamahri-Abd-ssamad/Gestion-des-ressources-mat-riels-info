@@ -14,13 +14,12 @@ namespace Projet.Models
         public string? Description { get; set; }
 
         [Required(ErrorMessage = "La date de début est obligatoire")]
-        public DateTime? StartDate { get; set; }   // ✅ nullable
+        public DateTime? StartDate { get; set; }   
 
         [Required(ErrorMessage = "La date de fin est obligatoire")]
-        public DateTime? EndDate { get; set; }     // ✅ nullable
-
+        public DateTime? EndDate { get; set; }
         public TenderStatus Status { get; set; }
-        
+
 
         public TenderDto()
         {
@@ -30,8 +29,7 @@ namespace Projet.Models
             EndDate = null;
             Status = TenderStatus.Open;
         }
-        public TenderDto(int Id, string Title, string? Description, DateTime? StartDate, DateTime? EndDate,
-            TenderStatus Status)
+        public TenderDto(int Id, string Title, string? Description, DateTime? StartDate, DateTime? EndDate, TenderStatus Status)
         {
             this.Id = Id;
             this.Title = Title;
@@ -40,12 +38,13 @@ namespace Projet.Models
             this.EndDate = EndDate;
             this.Status = Status;
 
+
         }
 
         public override string ToString()
         {
             return $@"Id: {Id} Title: {Title} Description: {Description}
-                    StartDate: {StartDate} EndDate: {EndDate} Status: {Status}";
+                    StartDate: {StartDate} EndDate: {EndDate} Status : {Status}  ";
         }
     }
 }

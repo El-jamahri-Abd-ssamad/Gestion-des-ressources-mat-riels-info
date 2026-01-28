@@ -12,6 +12,9 @@
 
         <input type="hidden" name="tenderId" value="@Model.TenderId" />
 
+        @* Champ caché pour envoyer le statut (initialisé en OnGet) *@
+        <input asp-for="Offer.Status" type="hidden" />
+
         <div class="mb-3">
             <label asp-for="Offer.TotalPrice" class="form-label">Montant total</label>
             <input asp-for="Offer.TotalPrice" class="form-control" />
