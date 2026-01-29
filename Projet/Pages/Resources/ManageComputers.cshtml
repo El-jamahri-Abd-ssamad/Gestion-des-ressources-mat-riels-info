@@ -1,0 +1,45 @@
+﻿@page
+@model Projet.Pages.Resources.ManageComputersModel
+
+<h2>Gestion des Ordinateurs</h2>
+
+<div>
+    <a asp-page="./AddComputer" class="btn btn-primary">Ajouter un Ordinateur</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>N° Inventaire</th>
+            <th>Marque</th>
+            <th>CPU</th>
+            <th>RAM</th>
+            <th>Disque Dur</th>
+            <th>Écran</th>
+            <th>Affecté à</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var computer in Model.Computers)
+        {
+            <tr>
+                <td>@computer.InventoryNumber</td>
+                <td>@computer.Brand</td>
+                <td>@computer.CPU</td>
+                <td>@computer.RAM</td>
+                <td>@computer.HardDrive</td>
+                <td>@computer.Screen</td>
+                <td>@computer.AssignedTo</td>
+                <td>@computer.AssignmentType</td>
+                <td>
+                    <a asp-page="./EditComputers" asp-route-inventoryNumber="@computer.InventoryNumber">Modifier</a>
+                    <form method="post" asp-page-handler="Delete" asp-route-inventoryNumber="@computer.InventoryNumber" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Supprimer cet ordinateur?')">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

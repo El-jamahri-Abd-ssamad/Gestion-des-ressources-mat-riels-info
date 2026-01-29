@@ -9,6 +9,7 @@ namespace Projet.Security
         public static Role Role { get; set; }
         public static int ResponsableKey => Username?.GetHashCode() ?? 0;
 
+
         public static bool IsAuthenticated
         {
             get { return !string.IsNullOrEmpty(Username); }

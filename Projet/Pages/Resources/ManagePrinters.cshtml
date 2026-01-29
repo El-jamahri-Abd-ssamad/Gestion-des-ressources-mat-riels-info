@@ -1,0 +1,41 @@
+﻿@page
+@model Projet.Pages.Resources.ManagePrintersModel
+
+<h2>Gestion des Imprimantes</h2>
+
+<div>
+    <a asp-page="./AddPrinter" class="btn btn-primary">Ajouter une Imprimante</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>N° Inventaire</th>
+            <th>Marque</th>
+            <th>Vitesse (ppm)</th>
+            <th>Résolution</th>
+            <th>Affecté à</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var printer in Model.Printers)
+        {
+        <tr>
+            <td>@printer.InventoryNumber</td>
+            <td>@printer.Brand</td>
+            <td>@printer.PrintSpeed</td>
+            <td>@printer.Resolution</td>
+            <td>@printer.AssignedTo</td>
+            <td>@printer.AssignmentType</td>
+            <td>
+                <a asp-page="./EditPrinter" asp-route-inventoryNumber="@printer.InventoryNumber">Modifier</a>
+                <form method="post" asp-page-handler="Delete" asp-route-inventoryNumber="@printer.InventoryNumber" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Supprimer cette imprimante?')">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

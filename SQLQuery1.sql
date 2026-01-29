@@ -1,4 +1,4 @@
-//dev 1
+ï»¿
 
 CREATE TABLE Account (
     Id INT IDENTITY PRIMARY KEY,
@@ -18,7 +18,7 @@ CREATE TABLE [User] (
         FOREIGN KEY (IdAccount) REFERENCES Account(Id)
 );
 
-//dev3
+
 
 CREATE TABLE Tender (
     Id INT IDENTITY PRIMARY KEY,
@@ -105,8 +105,8 @@ CREATE INDEX IDX_Offer_Supplier ON Offer(IdSupplier);
 CREATE INDEX IDX_Supplier_User ON Supplier(IdUser);
 
 
-//dev4
--- Créer les tables
+
+-- CrÃ©er les tables
 CREATE TABLE Computers (
     Id INT PRIMARY KEY IDENTITY(1,1),
     InventoryNumber NVARCHAR(50) NOT NULL UNIQUE,
@@ -151,12 +151,12 @@ CREATE TABLE Assignments (
     IsActive BIT NOT NULL DEFAULT 1
 );
 
--- Données de test
+-- DonnÃ©es de test
 INSERT INTO Computers (InventoryNumber, Brand, CPU, RAM, HardDrive, Screen, DeliveryDate, AssignedTo, AssignmentType, DepartmentId, CreatedAt)
-VALUES ('INV-001', 'Dell', 'Intel i7', '16GB', '512GB SSD', '24"', GETDATE(), 'Département Info', 'Department', 1, GETDATE());
+VALUES ('INV-001', 'Dell', 'Intel i7', '16GB', '512GB SSD', '24"', GETDATE(), 'DÃ©partement Info', 'Department', 1, GETDATE());
 
 INSERT INTO Printers (InventoryNumber, Brand, PrintSpeed, Resolution, DeliveryDate, AssignedTo, AssignmentType, DepartmentId, CreatedAt)
-VALUES ('PRT-001', 'HP', 40, '1200dpi', GETDATE(), 'Département Info', 'Department', 1, GETDATE());
+VALUES ('PRT-001', 'HP', 40, '1200dpi', GETDATE(), 'DÃ©partement Info', 'Department', 1, GETDATE());
 
 
 
