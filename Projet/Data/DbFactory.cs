@@ -17,19 +17,18 @@ namespace Projet.Data
 using Microsoft.Data.SqlClient;
 using System;
 
+using Microsoft.Data.SqlClient;
+
 namespace Projet.Data
 {
     public class DbFactory
     {
         private static readonly string connectionString =
-                @"Data Source=(LocalDB)\MSSQLLocalDB;
-                Initial Catalog = dbbb;
-                Integrated Security = True;
-                Connect Timeout = 30;
-                Encrypt=True;
-                TrustServerCertificate=False;
-                ApplicationIntent=ReadWrite;
-                MultiSubnetFailover=False";
+            @"Data Source=(LocalDB)\MSSQLLocalDB;
+              AttachDbFilename=D:\NET\GESTION-DES-RESSOURCES-MAT-RIELS-INFO\PROJET\DATA\DB1.mdf;
+              Integrated Security=True;
+              Connect Timeout=30;";
+
         public static SqlConnection GetConnection()
         {
             return new SqlConnection(connectionString);

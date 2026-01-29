@@ -10,7 +10,7 @@ namespace Projet.Data
         void ValidateBesoin(int besoinId);
         void DeleteBesoin(int besoinId);
         public void RejectBesoin(int besoinId);
-        public void UpdateBesoin(Besoin besoin);
+        public bool UpdateBesoin(Besoin besoin);
         public Besoin GetBesoinById(int id);
     }
 }
