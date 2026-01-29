@@ -11,6 +11,7 @@ namespace Projet.Security
         public static bool IsAuthenticated
         {
             get { return !string.IsNullOrEmpty(Username); }
+        }
 
         public static bool IsAuthenticated => !string.IsNullOrEmpty(Username);
 
