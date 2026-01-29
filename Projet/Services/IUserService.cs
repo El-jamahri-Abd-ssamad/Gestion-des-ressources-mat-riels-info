@@ -11,5 +11,6 @@ namespace Projet.Services
         List<UserDto> GetUsers();
         bool UpdateUser(UserDto olduser, UserDto newUser);
         User Login(string username, string password);
+        public int GetUserIdByUsername(string username);
     }
 }

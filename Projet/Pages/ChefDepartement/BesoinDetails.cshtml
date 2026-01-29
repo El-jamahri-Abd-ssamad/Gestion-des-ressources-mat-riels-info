@@ -1,0 +1,33 @@
+﻿@model Projet.Models.BesoinChefDto
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Détails du besoin</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <p><strong>Type :</strong> @Model.TypeRessource</p>
+                <p><strong>Description :</strong> @Model.Description</p>
+                <p><strong>Quantité :</strong> @Model.Quantite</p>
+                <p><strong>Date :</strong> @Model.DateSoumission</p>
+            </div>
+
+            <div class="modal-footer">
+                @if (!Model.Valide)
+                {
+                    <button class="btn btn-success">Valider</button>
+                    <button class="btn btn-outline-danger">Rejeter</button>
+                }
+                else
+                {
+                    <span class="text-success">Besoin déjà validé</span>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

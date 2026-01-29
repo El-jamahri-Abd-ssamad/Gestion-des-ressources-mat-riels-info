@@ -98,5 +98,12 @@ namespace Projet.Services
 
             return user;
         }
+        public int GetUserIdByUsername(string username)
+        {
+            return userDao.GetUserIdByUsername(username);
+        }
+
     }
-}
+    
+
+    }

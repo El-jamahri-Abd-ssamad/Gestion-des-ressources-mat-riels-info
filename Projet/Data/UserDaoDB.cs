@@ -134,6 +134,18 @@ namespace Projet.Data
                 }
             }
         }
+        public int GetAccountIdByUsername(string username)
+        {
+            using var connection = DbFactory.GetConnection();
+            var command = new SqlCommand(
+                "SELECT Id FROM Account WHERE Username = @u",
+                connection
+            );
+            command.Parameters.AddWithValue("@u", username);
+
+            connection.Open();
+            return (int)command.ExecuteScalar();
+        }
     }
 
 }

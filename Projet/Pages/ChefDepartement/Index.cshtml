@@ -1,0 +1,147 @@
+﻿@page
+@model Projet.Pages.ChefDepartement.IndexModel
+@{
+    ViewData["Title"] = "Dashboard Chef de Département";
+}
+
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="/SignIn">Déconnexion</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <h1>Besoins du département</h1>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <p>@Model.Message</p>
+        }
+        else
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type Ressource</th>
+                        <th>Description</th>
+                        <th>Quantité</th>
+                        <th>Validé</th>
+                        <th>Date Soumission</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var besoin in Model.Besoins)
+                    {
+                        <tr>
+                            <td>@besoin.TypeRessource</td>
+                            <td>@besoin.Description</td>
+                            <td>@besoin.Quantite</td>
+                            <td>@(besoin.Valide ? "Oui" : "Non")</td>
+                            <td>@besoin.DateSoumission.ToShortDateString()</td>
+                            <td>
+                                <!-- Valider / Rejeter -->
+                                <form method="post" asp-page-handler="Valider" style="display:inline;">
+                                    <input type="hidden" name="besoinId" value="@besoin.Code" />
+                                    <button class="btn btn-success" @(besoin.Valide ? "disabled" : "")>Valider</button>
+                                </form>
+                                <form method="post" asp-page-handler="Rejeter" style="display:inline;">
+                                    <input type="hidden" name="besoinId" value="@besoin.Code" />
+                                    <button class="btn btn-warning" @(besoin.Valide ? "" : "disabled")>Rejeter</button>
+                                </form>
+
+                                <!-- Modifier / Supprimer -->
+                                <form method="post" asp-page-handler="Modifier" style="display:inline;">
+                                    <input type="hidden" name="besoinId" value="@besoin.Code" />
+                                    <button class="btn btn-primary">Modifier</button>
+                                </form>
+                                <form method="post" asp-page-handler="Supprimer" style="display:inline;">
+                                    <input type="hidden" name="besoinId" value="@besoin.Code" />
+                                    <button class="btn btn-danger">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </main>
+</div>
+
+<style>
+    .dashboard-container {
+        display: flex;
+        font-family: Arial;
+    }
+
+    .sidebar {
+        width: 220px;
+        background: #2c3e50;
+        color: white;
+        padding: 20px;
+        height: 100vh;
+    }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            .sidebar ul li {
+                margin: 15px 0;
+            }
+
+                .sidebar ul li a {
+                    color: white;
+                    text-decoration: none;
+                }
+
+    .main-content {
+        flex: 1;
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    th {
+        background: #34495e;
+        color: white;
+    }
+
+    .btn {
+        padding: 4px 8px;
+        margin-right: 5px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        color: white;
+    }
+
+    .btn-success {
+        background-color: #27ae60;
+    }
+
+    .btn-warning {
+        background-color: #f39c12;
+    }
+
+    .btn-primary {
+        background-color: #2980b9;
+    }
+
+    .btn-danger {
+        background-color: #c0392b;
+    }
+</style>
