@@ -1,4 +1,4 @@
-//dev 1
+ï»¿
 
 CREATE TABLE Account (
     Id INT IDENTITY PRIMARY KEY,
@@ -18,28 +18,7 @@ CREATE TABLE [User] (
         FOREIGN KEY (IdAccount) REFERENCES Account(Id)
 );
 
-CREATE TABLE [dbo].[Departement] (
-    [Id] INT IDENTITY(1,1) NOT NULL,
-    [Nom] VARCHAR(100) NOT NULL,
-    [Budget] DECIMAL(18,2) NOT NULL,
-    [ChefId] INT NOT NULL,  -- référence Account.Id
-    PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Departement_Chef] FOREIGN KEY ([ChefId]) REFERENCES [dbo].[Account]([Id])
-);
 
-CREATE TABLE [dbo].[Besoin] (
-    [Code] INT IDENTITY(1,1) NOT NULL,
-    [DepartementId] INT NOT NULL,
-    [DateSoumission] DATETIME NOT NULL,
-    [TypeRessource] VARCHAR(50) NOT NULL,  -- Ordinateur / Imprimante
-    [Description] VARCHAR(255) NOT NULL,
-    [Quantite] INT NOT NULL,
-    [ValideParChef] BIT NOT NULL DEFAULT 0,
-    PRIMARY KEY CLUSTERED ([Code] ASC),
-    CONSTRAINT [FK_Besoin_Departement] FOREIGN KEY ([DepartementId]) REFERENCES [dbo].[Departement]([Id])
-);
-
-//dev3
 
 CREATE TABLE Tender (
     Id INT IDENTITY PRIMARY KEY,
@@ -126,8 +105,8 @@ CREATE INDEX IDX_Offer_Supplier ON Offer(IdSupplier);
 CREATE INDEX IDX_Supplier_User ON Supplier(IdUser);
 
 
-//dev4
--- Créer les tables
+
+-- CrÃ©er les tables
 CREATE TABLE Computers (
     Id INT PRIMARY KEY IDENTITY(1,1),
     InventoryNumber NVARCHAR(50) NOT NULL UNIQUE,
@@ -172,12 +151,12 @@ CREATE TABLE Assignments (
     IsActive BIT NOT NULL DEFAULT 1
 );
 
--- Données de test
+-- DonnÃ©es de test
 INSERT INTO Computers (InventoryNumber, Brand, CPU, RAM, HardDrive, Screen, DeliveryDate, AssignedTo, AssignmentType, DepartmentId, CreatedAt)
-VALUES ('INV-001', 'Dell', 'Intel i7', '16GB', '512GB SSD', '24"', GETDATE(), 'Département Info', 'Department', 1, GETDATE());
+VALUES ('INV-001', 'Dell', 'Intel i7', '16GB', '512GB SSD', '24"', GETDATE(), 'DÃ©partement Info', 'Department', 1, GETDATE());
 
 INSERT INTO Printers (InventoryNumber, Brand, PrintSpeed, Resolution, DeliveryDate, AssignedTo, AssignmentType, DepartmentId, CreatedAt)
-VALUES ('PRT-001', 'HP', 40, '1200dpi', GETDATE(), 'Département Info', 'Department', 1, GETDATE());
+VALUES ('PRT-001', 'HP', 40, '1200dpi', GETDATE(), 'DÃ©partement Info', 'Department', 1, GETDATE());
 
 
 

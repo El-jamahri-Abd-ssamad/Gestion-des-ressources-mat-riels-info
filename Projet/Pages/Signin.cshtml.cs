@@ -1,11 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+<<<<<<< HEAD
 using Projet.Data;
 using Projet.Domain;
 using Projet.Domain.Enums;
 using Projet.Models;
 using Projet.Security;
 using Projet.Services;
+=======
+using Projet.Domain;
+using Projet.Domain.Enums;
+using Projet.Entities;
+using Projet.Models;
+using Projet.Security;
+using Projet.Services;
+using System;
+using static System.Collections.Specialized.BitVector32;
+>>>>>>> fd6a54f031cc1f8c05face9741645e0d3836bec2
 using AppContext = Projet.Security.AppContext;
 
 namespace Projet.Pages
@@ -45,7 +56,15 @@ namespace Projet.Pages
                 Role.Enseignant => RedirectToPage("/Enseignant/Dashboard"),
                 Role.Fournisseur => RedirectToPage("/Suppliers/Dashboard"),
                 Role.Technicien => RedirectToPage("/Maintenance/CreateReport"),
+<<<<<<< HEAD
                 _ => RedirectToPage("/Index")
+=======
+                Role.ResponsableRessources => RedirectToPage("/Resources/ManageComputers"),
+                
+
+
+                _ => RedirectToPage("/Welcome")
+>>>>>>> fd6a54f031cc1f8c05face9741645e0d3836bec2
             };
         }
     }

@@ -1,0 +1,54 @@
+﻿@page
+@model Projet.Pages.Resources.EditPrinterModel
+
+<h2>Modifier l'Imprimante</h2>
+
+<form method="post">
+    <input asp-for="Printer.Id" type="hidden" />
+
+    <div>
+        <label>Numéro d'inventaire</label>
+        <input asp-for="Printer.InventoryNumber" readonly />
+    </div>
+    <div>
+        <label>Marque</label>
+        <input asp-for="Printer.Brand" />
+        <span asp-validation-for="Printer.Brand"></span>
+    </div>
+    <div>
+        <label>Vitesse d'impression (ppm)</label>
+        <input asp-for="Printer.PrintSpeed" type="number" />
+        <span asp-validation-for="Printer.PrintSpeed"></span>
+    </div>
+    <div>
+        <label>Résolution</label>
+        <input asp-for="Printer.Resolution" />
+        <span asp-validation-for="Printer.Resolution"></span>
+    </div>
+    <div>
+        <label>Date de livraison</label>
+        <input asp-for="Printer.DeliveryDate" type="date" />
+    </div>
+    <div>
+        <label>Affecté à</label>
+        <input asp-for="Printer.AssignedTo" />
+        <span asp-validation-for="Printer.AssignedTo"></span>
+    </div>
+    <div>
+        <label>Type d'affectation</label>
+        <select asp-for="Printer.AssignmentType">
+            <option value="Department">Département</option>
+            <option value="Teacher">Enseignant</option>
+        </select>
+    </div>
+    <div>
+        <label>ID Département</label>
+        <input asp-for="Printer.DepartmentId" type="number" />
+    </div>
+    <div>
+        <label>ID Fournisseur</label>
+        <input asp-for="Printer.SupplierId" type="number" />
+    </div>
+    <button type="submit">Enregistrer</button>
+    <a asp-page="./ManagePrinters">Annuler</a>
+</form>
