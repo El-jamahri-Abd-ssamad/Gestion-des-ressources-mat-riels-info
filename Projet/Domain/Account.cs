@@ -1,4 +1,7 @@
-﻿namespace Projet.Domain
+﻿using System;
+using Projet.Domain.Enums;
+
+namespace Projet.Domain
 {
     public class Account
     {

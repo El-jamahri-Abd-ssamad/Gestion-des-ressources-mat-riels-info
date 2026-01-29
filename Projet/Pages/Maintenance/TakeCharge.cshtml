@@ -1,0 +1,35 @@
+@page "{id:int}"
+@model Projet.Pages.Maintenance.TakeChargeModel
+
+<h2>Prise en charge - Panne @Model.Fault?.Id</h2>
+
+@if (Model.Fault == null)
+{
+    <p>Introuvable.</p>
+}
+else
+{
+    <p>Ressource: @Model.Fault.IdResource</p>
+    <p>Description: @Model.Fault.Description</p>
+
+    <form method="post">
+        <input asp-for="Intervention.IdFault" type="hidden" />
+        <div>
+            <label>TechnicianId (passé en query string ou à saisir)</label>
+            <input asp-for="Intervention.TechnicianId" />
+        </div>
+        <div>
+            <label>Réparable ?</label>
+            <select asp-for="IsReparable">
+                <option value="">--</option>
+                <option value="true">Réparable</option>
+                <option value="false">Sévère</option>
+            </select>
+        </div>
+        <div>
+            <label>Notes</label>
+            <textarea asp-for="Intervention.Notes"></textarea>
+        </div>
+        <button type="submit">Enregistrer intervention</button>
+    </form>
+}

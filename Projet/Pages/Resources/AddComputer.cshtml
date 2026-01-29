@@ -1,0 +1,63 @@
+﻿@page
+@model Projet.Pages.Resources.AddComputerModel
+
+<h2>Ajouter un Ordinateur</h2>
+
+<form method="post">
+    <div>
+        <label>Numéro d'inventaire</label>
+        <input asp-for="Computer.InventoryNumber" />
+        <span asp-validation-for="Computer.InventoryNumber"></span>
+    </div>
+    <div>
+        <label>Marque</label>
+        <input asp-for="Computer.Brand" />
+        <span asp-validation-for="Computer.Brand"></span>
+    </div>
+    <div>
+        <label>CPU</label>
+        <input asp-for="Computer.CPU" />
+        <span asp-validation-for="Computer.CPU"></span>
+    </div>
+    <div>
+        <label>RAM</label>
+        <input asp-for="Computer.RAM" />
+        <span asp-validation-for="Computer.RAM"></span>
+    </div>
+    <div>
+        <label>Disque Dur</label>
+        <input asp-for="Computer.HardDrive" />
+        <span asp-validation-for="Computer.HardDrive"></span>
+    </div>
+    <div>
+        <label>Écran</label>
+        <input asp-for="Computer.Screen" />
+        <span asp-validation-for="Computer.Screen"></span>
+    </div>
+    <div>
+        <label>Date de livraison</label>
+        <input asp-for="Computer.DeliveryDate" type="date" />
+    </div>
+    <div>
+        <label>Affecté à</label>
+        <input asp-for="Computer.AssignedTo" />
+        <span asp-validation-for="Computer.AssignedTo"></span>
+    </div>
+    <div>
+        <label>Type d'affectation</label>
+        <select asp-for="Computer.AssignmentType">
+            <option value="Department">Département</option>
+            <option value="Teacher">Enseignant</option>
+        </select>
+    </div>
+    <div>
+        <label>ID Département</label>
+        <input asp-for="Computer.DepartmentId" type="number" />
+    </div>
+    <div>
+        <label>ID Fournisseur</label>
+        <input asp-for="Computer.SupplierId" type="number" />
+    </div>
+    <button type="submit">Ajouter</button>
+    <a asp-page="./ManageComputers">Annuler</a>
+</form>

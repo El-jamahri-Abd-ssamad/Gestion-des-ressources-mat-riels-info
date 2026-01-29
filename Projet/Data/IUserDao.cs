@@ -9,5 +9,7 @@ namespace Projet.Data
         void DeleteUser(string username);
         void UpdateUser(User olduser, User newUser);
         List<User> GetUsers();
+        int GetUserIdByUsername(string? name);
+        public int GetAccountIdByUsername(string username);
     }
 }

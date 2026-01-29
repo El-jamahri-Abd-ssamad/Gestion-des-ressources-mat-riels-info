@@ -4,7 +4,7 @@ CREATE TABLE Account (
     Id INT IDENTITY PRIMARY KEY,
     Username VARCHAR(50) UNIQUE NOT NULL,
     Password VARCHAR(255) NOT NULL,
-    Role VARCHAR(20) NOT NULL
+    Role INT NOT NULL
 );
 
 CREATE TABLE [User] (
@@ -16,6 +16,27 @@ CREATE TABLE [User] (
     IdAccount INT NOT NULL,
     CONSTRAINT FK_User_Account
         FOREIGN KEY (IdAccount) REFERENCES Account(Id)
+);
+
+CREATE TABLE [dbo].[Departement] (
+    [Id] INT IDENTITY(1,1) NOT NULL,
+    [Nom] VARCHAR(100) NOT NULL,
+    [Budget] DECIMAL(18,2) NOT NULL,
+    [ChefId] INT NOT NULL,  -- référence Account.Id
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Departement_Chef] FOREIGN KEY ([ChefId]) REFERENCES [dbo].[Account]([Id])
+);
+
+CREATE TABLE [dbo].[Besoin] (
+    [Code] INT IDENTITY(1,1) NOT NULL,
+    [DepartementId] INT NOT NULL,
+    [DateSoumission] DATETIME NOT NULL,
+    [TypeRessource] VARCHAR(50) NOT NULL,  -- Ordinateur / Imprimante
+    [Description] VARCHAR(255) NOT NULL,
+    [Quantite] INT NOT NULL,
+    [ValideParChef] BIT NOT NULL DEFAULT 0,
+    PRIMARY KEY CLUSTERED ([Code] ASC),
+    CONSTRAINT [FK_Besoin_Departement] FOREIGN KEY ([DepartementId]) REFERENCES [dbo].[Departement]([Id])
 );
 
 //dev3
@@ -103,3 +124,63 @@ CREATE INDEX IDX_Tender_Status ON Tender(Status);
 CREATE INDEX IDX_Offer_Tender ON Offer(IdTender);
 CREATE INDEX IDX_Offer_Supplier ON Offer(IdSupplier);
 CREATE INDEX IDX_Supplier_User ON Supplier(IdUser);
+
+
+//dev4
+-- Créer les tables
+CREATE TABLE Computers (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    InventoryNumber NVARCHAR(50) NOT NULL UNIQUE,
+    Brand NVARCHAR(100) NOT NULL,
+    CPU NVARCHAR(100) NOT NULL,
+    RAM NVARCHAR(50) NOT NULL,
+    HardDrive NVARCHAR(50) NOT NULL,
+    Screen NVARCHAR(50) NOT NULL,
+    DeliveryDate DATE NULL,
+    SupplierId INT NULL,
+    AssignedTo NVARCHAR(200) NOT NULL,
+    AssignmentType NVARCHAR(20) NOT NULL,
+    DepartmentId INT NULL,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 NULL
+);
+
+CREATE TABLE Printers (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    InventoryNumber NVARCHAR(50) NOT NULL UNIQUE,
+    Brand NVARCHAR(100) NOT NULL,
+    PrintSpeed INT NOT NULL,
+    Resolution NVARCHAR(50) NOT NULL,
+    DeliveryDate DATE NULL,
+    SupplierId INT NULL,
+    AssignedTo NVARCHAR(200) NOT NULL,
+    AssignmentType NVARCHAR(20) NOT NULL,
+    DepartmentId INT NULL,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),
+    UpdatedAt DATETIME2 NULL
+);
+
+CREATE TABLE Assignments (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    ResourceId INT NOT NULL,
+    ResourceType NVARCHAR(20) NOT NULL,
+    AssignedTo NVARCHAR(200) NOT NULL,
+    AssignmentType NVARCHAR(20) NOT NULL,
+    DepartmentId INT NULL,
+    AssignedDate DATETIME2 NOT NULL DEFAULT GETDATE(),
+    RevokedDate DATETIME2 NULL,
+    IsActive BIT NOT NULL DEFAULT 1
+);
+
+-- Données de test
+INSERT INTO Computers (InventoryNumber, Brand, CPU, RAM, HardDrive, Screen, DeliveryDate, AssignedTo, AssignmentType, DepartmentId, CreatedAt)
+VALUES ('INV-001', 'Dell', 'Intel i7', '16GB', '512GB SSD', '24"', GETDATE(), 'Département Info', 'Department', 1, GETDATE());
+
+INSERT INTO Printers (InventoryNumber, Brand, PrintSpeed, Resolution, DeliveryDate, AssignedTo, AssignmentType, DepartmentId, CreatedAt)
+VALUES ('PRT-001', 'HP', 40, '1200dpi', GETDATE(), 'Département Info', 'Department', 1, GETDATE());
+
+
+
+
+
+
