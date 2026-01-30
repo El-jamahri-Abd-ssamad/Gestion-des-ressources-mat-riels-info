@@ -38,6 +38,13 @@ CREATE TABLE [dbo].[Besoin] (
     PRIMARY KEY CLUSTERED ([Code] ASC),
     CONSTRAINT [FK_Besoin_Departement] FOREIGN KEY ([DepartementId]) REFERENCES [dbo].[Departement]([Id])
 );
+CREATE TABLE Notification (
+    Id INT IDENTITY PRIMARY KEY,
+    Message NVARCHAR(255),
+    DateCreation DATETIME,
+    EstLue BIT,
+    RoleCible INT
+);
 
 //dev3
 

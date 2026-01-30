@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Projet.Domain;
+using Projet.Domain.enums;
 using System;
 using System.Collections.Generic;
 
@@ -16,8 +17,8 @@ namespace Projet.Data
             command.Connection = connection;
             command.CommandText =
                 @"INSERT INTO Besoin
-                  (DepartementId, DateSoumission, TypeRessource, Description, Quantite, ValideParChef)
-                  VALUES (@DepId,@Date,@Type,@Desc,@Qte,@Valide)";
+                  (DepartementId, DateSoumission, TypeRessource, Description, Quantite, ValideParChef, Statut)
+                  VALUES (@DepId,@Date,@Type,@Desc,@Qte,@Valide, @Statut)";
 
             command.Parameters.AddWithValue("@DepId", besoin.DepartementId);
             command.Parameters.AddWithValue("@Date", besoin.DateSoumission);
@@ -25,6 +26,7 @@ namespace Projet.Data
             command.Parameters.AddWithValue("@Desc", besoin.Description);
             command.Parameters.AddWithValue("@Qte", besoin.Quantite);
             command.Parameters.AddWithValue("@Valide", besoin.ValideParChef);
+            command.Parameters.AddWithValue("@Statut", besoin.Statut);
 
             command.ExecuteNonQuery();
             command.Parameters.Clear();
@@ -53,7 +55,8 @@ namespace Projet.Data
                     TypeRessource = rd["TypeRessource"].ToString(),
                     Description = rd["Description"].ToString(),
                     Quantite = Convert.ToInt32(rd["Quantite"]),
-                    ValideParChef = Convert.ToBoolean(rd["ValideParChef"])
+                    ValideParChef = Convert.ToBoolean(rd["ValideParChef"]),
+                    Statut = (StatutBesoin)Convert.ToInt32(rd["Statut"])
                 });
             }
 
@@ -79,12 +82,13 @@ namespace Projet.Data
             {
                 list.Add(new Besoin
                 {
-                    Code = Convert.ToInt32(rd["Id"]),
+                    Code = Convert.ToInt32(rd["Code"]),
                     DepartementId = departementId,
                     TypeRessource = rd["TypeRessource"].ToString(),
                     Description = rd["Description"].ToString(),
                     Quantite = Convert.ToInt32(rd["Quantite"]),
-                    ValideParChef = true
+                    ValideParChef = true,
+                    Statut = (StatutBesoin)Convert.ToInt32(rd["Statut"])
                 });
             }
 
@@ -98,8 +102,9 @@ namespace Projet.Data
             connection.Open();
             command.Connection = connection;
             command.CommandText =
-                "UPDATE Besoin SET ValideParChef=1 WHERE Code=@Code";
+                "UPDATE Besoin SET ValideParChef=1, Statut=@Statut WHERE Code=@Code";
             command.Parameters.AddWithValue("@Code", besoinId);
+            command.Parameters.AddWithValue("@Statut", (int)StatutBesoin.Valide);
             command.ExecuteNonQuery();
             command.Parameters.Clear();
             connection.Close();
@@ -120,8 +125,9 @@ namespace Projet.Data
         {
             connection.Open();
             command.Connection = connection;
-            command.CommandText = "UPDATE Besoin SET ValideParChef=0 WHERE Code=@Code";
+            command.CommandText = "UPDATE Besoin SET ValideParChef=0, Statut=@Statut WHERE Code=@Code";
             command.Parameters.AddWithValue("@Code", besoinId);
+            command.Parameters.AddWithValue("@Statut", (int)StatutBesoin.Rejete);
             command.ExecuteNonQuery();
             command.Parameters.Clear();
             connection.Close();
@@ -138,7 +144,7 @@ namespace Projet.Data
             TypeRessource = @TypeRessource,
             Description = @Description,
             Quantite = @Quantite
-        WHERE Code = @Code";
+        WHERE Code = @Code AND Statut = 0";
 
             using var command = new SqlCommand(sql, connection);
 
@@ -147,6 +153,7 @@ namespace Projet.Data
             command.Parameters.AddWithValue("@Description", besoin.Description);
             command.Parameters.AddWithValue("@Quantite", besoin.Quantite);
             command.Parameters.AddWithValue("@Code", besoin.Code);
+            command.Parameters.AddWithValue("@Statut", besoin.Statut);
 
             int rows = command.ExecuteNonQuery();
 
@@ -170,12 +177,37 @@ namespace Projet.Data
             {
                 return new Besoin
                 {
-                    Code = rd.GetInt32(rd.GetOrdinal("Code")),
-                    // autres champs
+                    Code = Convert.ToInt32(rd["Code"]),
+                    DepartementId = Convert.ToInt32(rd["DepartementId"]),
+                    DateSoumission = Convert.ToDateTime(rd["DateSoumission"]),
+                    TypeRessource = rd["TypeRessource"].ToString(),
+                    Description = rd["Description"].ToString(),
+                    Quantite = Convert.ToInt32(rd["Quantite"]),
+                    ValideParChef = Convert.ToBoolean(rd["ValideParChef"]),
+                    Statut = (StatutBesoin)Convert.ToInt32(rd["Statut"])
                 };
             }
 
             return null;
+        }
+
+        public void EnvoyerBesoinsValides(int departementId)
+        {
+            connection.Open();
+            command.Connection = connection;
+            command.CommandText = @"
+        UPDATE Besoin
+        SET Statut = @Statut
+        WHERE DepartementId = @DepId AND Statut = @Valide
+    ";
+
+            command.Parameters.AddWithValue("@Statut", (int)StatutBesoin.Envoye);
+            command.Parameters.AddWithValue("@Valide", (int)StatutBesoin.Valide);
+            command.Parameters.AddWithValue("@DepId", departementId);
+
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();
+            connection.Close();
         }
 
 

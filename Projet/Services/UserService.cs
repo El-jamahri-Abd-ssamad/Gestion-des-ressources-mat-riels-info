@@ -12,6 +12,7 @@ namespace Projet.Services
             throw new NotImplementedException();
         }
 
+
         public UserDto GetUser(string username)
         {
             User u = userDao.GetUser(username);
@@ -82,9 +83,24 @@ namespace Projet.Services
             }
         }
 
-        public bool UpdateUser(UserDto olduser, UserDto newUser)
+        public bool UpdateUser(UserDto oldUser, UserDto newUser)
         {
-            throw new NotImplementedException();
+            // récupérer l'utilisateur existant depuis la BD
+            User existingUser = userDao.GetUser(oldUser.Username);
+
+            if (existingUser == null)
+                return false;
+
+            // mise à jour des champs modifiables
+            existingUser.Name = newUser.Name;
+            existingUser.Email = newUser.Email;
+            existingUser.Phone = newUser.Phone;
+            existingUser.DateBirth = newUser.DateBirth;
+
+            // appel DAO
+            userDao.UpdateUser(existingUser, existingUser);
+
+            return true;
         }
         public User Login(string username, string password)
         {

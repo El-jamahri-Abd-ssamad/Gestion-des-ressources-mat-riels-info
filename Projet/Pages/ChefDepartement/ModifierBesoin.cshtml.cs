@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Projet.Security;
-using Projet.Domain.Enums;
+using Projet.Domain.enums;
 using Projet.Services;
 using Projet.Models;
 using AppContext = Projet.Security.AppContext;

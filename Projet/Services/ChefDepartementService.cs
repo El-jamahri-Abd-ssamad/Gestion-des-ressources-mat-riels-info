@@ -1,5 +1,6 @@
 ﻿using Projet.Data;
 using Projet.Domain;
+using Projet.Domain.enums;
 using Projet.Models;
 
 namespace Projet.Services
@@ -8,6 +9,7 @@ namespace Projet.Services
     {
         private readonly IBesoinDao besoinDao;
         private readonly IDepartementDao departementDao;
+        private readonly NotificationDB notificationDb;
 
         public ChefDepartementService(IBesoinDao besoinDao, IDepartementDao departementDao)
         {
@@ -34,7 +36,8 @@ namespace Projet.Services
                     Description = b.Description,
                     Quantite = b.Quantite,
                     Valide = b.ValideParChef,
-                    DateSoumission = b.DateSoumission
+                    DateSoumission = b.DateSoumission,
+                    Statut = b.Statut
                 });
             }
 
@@ -57,7 +60,8 @@ namespace Projet.Services
                 TypeRessource = b.TypeRessource,
                 Description = b.Description,
                 Quantite = b.Quantite,
-                ValideParChef = false // le chef ne peut pas valider ici
+                ValideParChef = false, // le chef ne peut pas valider ici
+                Statut= b.Statut
             });
         }
 
@@ -78,8 +82,19 @@ namespace Projet.Services
                 Description = b.Description,
                 Quantite = b.Quantite,
                 Valide = b.ValideParChef,
-                DateSoumission = b.DateSoumission
+                DateSoumission = b.DateSoumission,
+                Statut = b.Statut
             };
+        }
+        public void EnvoyerBesoinsAuResponsable(int departementId, string nomDepartement)
+        {
+            besoinDao.EnvoyerBesoinsValides(departementId);
+            notificationDb.Ajouter(new Notification
+            {
+                Message = $"Nouveaux besoins envoyés par le département {nomDepartement}",
+                DateCreation = DateTime.Now,
+                RoleCible = Role.ResponsableRessources
+            });
         }
 
     }

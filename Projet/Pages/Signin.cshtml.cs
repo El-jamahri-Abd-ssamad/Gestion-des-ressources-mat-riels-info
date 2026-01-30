@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Projet.Data;
 using Projet.Domain;
-using Projet.Domain.Enums;
+using Projet.Domain.enums;
 using Projet.Models;
 using Projet.Security;
 using Projet.Services;
