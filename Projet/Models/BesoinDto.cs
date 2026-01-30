@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Projet.Domain.enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Projet.Models
 {
@@ -12,13 +13,16 @@ namespace Projet.Models
 
         [Range(1, 100)]
         public int Quantite { get; set; }
+        public StatutBesoin Statut { get; set; }
 
         public BesoinDto() { }
-        public BesoinDto(string typeRessource, string description, int quantite)
+
+        public BesoinDto(string typeRessource, string description, int quantite, StatutBesoin statut)
         {
             TypeRessource = typeRessource;
             Description = description;
             Quantite = quantite;
+            Statut = statut;
         }
     }
 }

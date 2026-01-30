@@ -1,33 +1,42 @@
-﻿@model Projet.Models.BesoinChefDto
+﻿@page
+@model Projet.Pages.ChefDepartement.BesoinDetailsModel
 
-<div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
+@using Projet.Domain.enums
 
-            <div class="modal-header">
-                <h5 class="modal-title">Détails du besoin</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="bi bi-info-circle me-2"></i>
+        Détails du besoin
+    </h5>
+</div>
 
-            <div class="modal-body">
-                <p><strong>Type :</strong> @Model.TypeRessource</p>
-                <p><strong>Description :</strong> @Model.Description</p>
-                <p><strong>Quantité :</strong> @Model.Quantite</p>
-                <p><strong>Date :</strong> @Model.DateSoumission</p>
-            </div>
+<div class="modal-body">
 
-            <div class="modal-footer">
-                @if (!Model.Valide)
-                {
-                    <button class="btn btn-success">Valider</button>
-                    <button class="btn btn-outline-danger">Rejeter</button>
-                }
-                else
-                {
-                    <span class="text-success">Besoin déjà validé</span>
-                }
-            </div>
+    <p><strong>Type :</strong> @Model.Besoin.TypeRessource</p>
+    <p><strong>Description :</strong> @Model.Besoin.Description</p>
+    <p><strong>Quantité :</strong> @Model.Besoin.Quantite</p>
+    <p><strong>Date :</strong> @Model.Besoin.DateSoumission.ToShortDateString()</p>
 
-        </div>
-    </div>
+    <p>
+        <strong>Statut :</strong>
+        <span class="badge bg-info">
+            @Model.Besoin.Statut
+        </span>
+    </p>
+
+</div>
+
+<div class="modal-footer">
+    @if (Model.Besoin.Statut == StatutBesoin.EnAttente)
+    {
+        <a asp-page="/ChefDepartement/ModifierBesoin"
+           asp-route-id="@Model.Besoin.Code"
+           class="btn btn-primary">
+            <i class="bi bi-pencil"></i>
+            Modifier
+        </a>
+    }
+    <button class="btn btn-secondary" data-bs-dismiss="modal">
+        Fermer
+    </button>
 </div>

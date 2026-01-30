@@ -12,5 +12,6 @@ namespace Projet.Data
         public void RejectBesoin(int besoinId);
         public bool UpdateBesoin(Besoin besoin);
         public Besoin GetBesoinById(int id);
+        void EnvoyerBesoinsValides(int departementId);
     }
 }
