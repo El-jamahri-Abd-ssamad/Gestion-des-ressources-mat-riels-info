@@ -30,7 +30,13 @@ namespace Projet.Services
 
         public void AddToBlacklist(BlacklistEntry Entry)
         {
-            dao.Insert(Entry);
+            dao.Insert(new BlacklistEntry
+            {
+                IdSupplier = Entry.IdSupplier,
+                Reason = Entry.Reason,
+                Date = Entry.Date,
+                CreatedBy = Entry.CreatedBy
+            });
 
         }
     }

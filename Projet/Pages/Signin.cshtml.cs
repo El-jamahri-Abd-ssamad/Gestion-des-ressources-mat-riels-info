@@ -40,7 +40,7 @@ namespace Projet.Pages
 
             return AppContext.Role switch
             {
-                Role.Admin => RedirectToPage("/Admin/Dashboard"),
+                Role.Admin => RedirectToPage("/Tenders/Index"),
                 Role.ChefDepartement => RedirectToPage("/ChefDepartement/Index"),
                 Role.Enseignant => RedirectToPage("/Enseignant/Dashboard"),
                 Role.Fournisseur => RedirectToPage("/Suppliers/Dashboard"),

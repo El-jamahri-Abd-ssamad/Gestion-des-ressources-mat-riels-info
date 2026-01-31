@@ -9,24 +9,39 @@ namespace Projet.Pages.Offers
     {
         [BindProperty]
         public OfferDto Offer { get; set; }
-        public int TenderId { get; set; }
 
         IOfferService service = new OfferService();
 
+        public int TenderId { get; set; }
+
         public void OnGet(int tenderId)
         {
-            TenderId = tenderId;
+            Offer = new OfferDto
+            {
+                TenderId = tenderId
+            };
         }
 
-        public IActionResult OnPost(int tenderId)
+        public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
-                return Page();
+            Console.WriteLine("ON POST CREATE OFFER");
 
-            Offer.TenderId = tenderId;
-            service.CreateOffer(1, Offer); // supplier temporaire
+            if (!ModelState.IsValid)
+            {
+                Console.WriteLine("MODEL STATE INVALID");
+                return Page();
+            }
+
+            int supplierId = 1; // temporaire
+
+            Offer.WarrantyMonths = 0;
+
+            service.CreateOffer(supplierId, Offer);
+
+            Console.WriteLine("OFFER INSERT DONE");
 
             return RedirectToPage("/Suppliers/Dashboard");
         }
+
     }
 }

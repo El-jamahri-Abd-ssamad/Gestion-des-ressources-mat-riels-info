@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Projet.Domain;
 using Projet.Services;
 using System;
+using System.Linq;
 
 namespace Projet.Pages.Blacklist
 {
@@ -11,14 +13,23 @@ namespace Projet.Pages.Blacklist
         [BindProperty]
         public BlacklistEntry Entry { get; set; }
 
-        IBlacklistService service = new BlacklistService();
+        public SelectList Suppliers { get; set; }
+
+        IBlacklistService blacklistService = new BlacklistService();
+        ISupplierService supplierService = new SupplierService();
+
+        public void OnGet()
+        {
+            var suppliers = supplierService.GetAllOffers();
+            Suppliers = new SelectList(suppliers, "Id", "Name");
+        }
 
         public IActionResult OnPost()
         {
             Entry.Date = DateTime.Now;
-            Entry.CreatedBy = 1; // admin temporaire
+            Entry.CreatedBy = 1;
 
-            service.AddToBlacklist(Entry);
+            blacklistService.AddToBlacklist(Entry);
             return RedirectToPage("Index");
         }
     }

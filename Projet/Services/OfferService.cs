@@ -9,10 +9,8 @@ namespace Projet.Services
     public class OfferService : IOfferService
     {
         OfferDaoDB dao = new OfferDaoDB();
-
-        
-
         BlacklistDaoDB blacklistDao = new BlacklistDaoDB();
+
 
         public void CreateOffer(int supplierId, OfferDto dto)
         {
@@ -31,7 +29,6 @@ namespace Projet.Services
 
             dao.Insert(o);
         }
-
 
 
         public List<OfferDto> GetOffersBySupplier(int supplierId)

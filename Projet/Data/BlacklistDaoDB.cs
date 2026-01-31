@@ -10,11 +10,12 @@ namespace Projet.Data
         {
             using SqlConnection cn = DbFactory.GetConnection();
             using SqlCommand cmd = new SqlCommand(
-                @"INSERT INTO BlacklistEntry (IdSupplier, Reason, CreatedBy)
-                  VALUES (@s, @r, @u)", cn);
+                @"INSERT INTO BlacklistEntry (IdSupplier, Reason, Date, CreatedBy)
+                    VALUES (@s,@r,GETDATE(),@u)", cn);
 
             cmd.Parameters.AddWithValue("@s", entry.IdSupplier);
             cmd.Parameters.AddWithValue("@r", entry.Reason);
+            cmd.Parameters.AddWithValue("@d", entry.Date);
             cmd.Parameters.AddWithValue("@u", entry.CreatedBy);
 
             cn.Open();

@@ -16,6 +16,6 @@ namespace Projet.Models
         public string Status { get; set; }
 
         // pour détailler l’offre
-        //public List<OfferItemDto> Items { get; set; } = new List<OfferItemDto>();
+        public List<OfferItemDto> Items { get; set; } = new List<OfferItemDto>();
     }
 }
