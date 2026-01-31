@@ -1,29 +1,47 @@
-@page
+﻿@page "{id:int}"
 @model Projet.Pages.Tenders.DetailsModel
 
-@{
-    ViewData["Title"] = "Détails appel d’offre";
+<h2>@Model.Tender.Title</h2>
+
+<p>Statut : <strong>@Model.Tender.Status</strong></p>
+
+@if (Model.IsSupplier && Model.CanSubmitOffer)
+{
+    <a asp-page="/Offers/Create"
+       asp-route-tenderId="@Model.Tender.Id"
+       class="btn btn-success">
+        Soumettre une offre
+    </a>
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">📄 Détails de l’appel d’offre</h2>
 
-    <div class="card shadow-sm p-4 mb-3">
-        <p><strong>Titre :</strong> @Model.Tender.Title</p>
-        <p><strong>Date début :</strong> @(Model.Tender.StartDate.HasValue ? Model.Tender.StartDate.Value.ToShortDateString() : "")</p>
-        <p><strong>Date fin :</strong> @(Model.Tender.EndDate.HasValue ? Model.Tender.EndDate.Value.ToShortDateString() : "")</p>
-        <p>
-            <strong>Statut :</strong>
-            <span class="badge bg-success">@Model.Tender.Status</span>
-        </p>
-    </div>
+@if (Model.IsAdmin)
+{
+    <h4>📄 Offres reçues</h4>
 
-    <div class="d-flex justify-content-between">
-        <a asp-page="Index" class="btn btn-secondary">⬅ Retour</a>
-        <a asp-page="/Offers/Create"
-           asp-route-tenderId="@Model.Tender.Id"
-           class="btn btn-primary">
-            📝 Soumettre une offre
-        </a>
-    </div>
-</div>
+    <table class="table">
+        <tr>
+            <th>Fournisseur</th>
+            <th>Prix</th>
+            <th>Statut</th>
+        </tr>
+
+        @foreach (var o in Model.Offers)
+        {
+            <tr>
+                <td>@o.SupplierId</td>
+                <td>@o.TotalPrice</td>
+                <td>@o.Status</td>
+            </tr>
+        }
+    </table>
+
+    @if (Model.Offers.Any())
+    {
+        <form method="post">
+            <button class="btn btn-danger">
+                🏆 Sélectionner le moins disant
+            </button>
+        </form>
+    }
+}

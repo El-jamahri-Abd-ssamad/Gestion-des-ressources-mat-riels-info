@@ -131,5 +131,39 @@ namespace Projet.Data
                 SubmissionDate = (DateTime)rd["SubmissionDate"]
             };
         }
+
+        public List<Offer> GetByTenderId(int tenderId)
+        {
+            var list = new List<Offer>();
+
+            using (SqlConnection cn = DbFactory.GetConnection())
+            using (SqlCommand cmd = new SqlCommand(
+                "SELECT * FROM Offer WHERE IdTender=@t", cn))
+            {
+                cmd.Parameters.AddWithValue("@t", tenderId);
+                cn.Open();
+
+                using (SqlDataReader rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                        list.Add(MapOffer(rd));
+                }
+            }
+            return list;
+        }
+
+        public void UpdateStatus(int offerId, OfferStatus status)
+        {
+            using (SqlConnection cn = DbFactory.GetConnection())
+            using (SqlCommand cmd = new SqlCommand(
+                "UPDATE Offer SET Status=@s WHERE Id=@id", cn))
+            {
+                cmd.Parameters.AddWithValue("@s", status.ToString());
+                cmd.Parameters.AddWithValue("@id", offerId);
+                cn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
     }
 }
