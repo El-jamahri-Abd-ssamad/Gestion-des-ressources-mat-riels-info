@@ -127,52 +127,55 @@ namespace Projet.Data
             connection.Close();
         }
 
-        public void UpdateBesoin(Besoin besoin)
+        public bool UpdateBesoin(Besoin besoin)
         {
+            using var connection = DbFactory.GetConnection();
             connection.Open();
-            command.Connection = connection;
-            command.CommandText =
-                @"UPDATE Besoin 
-                  SET TypeRessource=@Type, Description=@Desc, Quantite=@Qte
-                  WHERE Id=@Id";
 
-            command.Parameters.AddWithValue("@Type", besoin.TypeRessource);
-            command.Parameters.AddWithValue("@Desc", besoin.Description);
-            command.Parameters.AddWithValue("@Qte", besoin.Quantite);
-            command.Parameters.AddWithValue("@Id", besoin.Code);
+            string sql = @"
+        UPDATE Besoin
+        SET
+            TypeRessource = @TypeRessource,
+            Description = @Description,
+            Quantite = @Quantite
+        WHERE Code = @Code";
 
-            command.ExecuteNonQuery();
-            command.Parameters.Clear();
-            connection.Close();
+            using var command = new SqlCommand(sql, connection);
+
+            // 🔥 TOUS les paramètres doivent exister
+            command.Parameters.AddWithValue("@TypeRessource", besoin.TypeRessource);
+            command.Parameters.AddWithValue("@Description", besoin.Description);
+            command.Parameters.AddWithValue("@Quantite", besoin.Quantite);
+            command.Parameters.AddWithValue("@Code", besoin.Code);
+
+            int rows = command.ExecuteNonQuery();
+
+            return rows > 0;
         }
 
         public Besoin GetBesoinById(int id)
         {
+            using var connection = DbFactory.GetConnection();
             connection.Open();
-            command.Connection = connection;
-            command.CommandText = "SELECT * FROM Besoin WHERE Code=@Code";
-            command.Parameters.AddWithValue("@Id", id);
 
-            var rd = command.ExecuteReader();
-            Besoin besoin = null;
+            string sql = "SELECT * FROM Besoin WHERE Code = @Code";
+            using var command = new SqlCommand(sql, connection);
+
+            // 🔥 PARAMÈTRE OBLIGATOIRE
+            command.Parameters.AddWithValue("@Code", id);
+
+            using var rd = command.ExecuteReader();
 
             if (rd.Read())
             {
-                besoin = new Besoin
+                return new Besoin
                 {
-                    Code = Convert.ToInt32(rd["Code"]),
-                    DepartementId = Convert.ToInt32(rd["DepartementId"]),
-                    TypeRessource = rd["TypeRessource"].ToString(),
-                    Description = rd["Description"].ToString(),
-                    Quantite = Convert.ToInt32(rd["Quantite"]),
-                    ValideParChef = Convert.ToBoolean(rd["ValideParChef"]),
-                    DateSoumission = Convert.ToDateTime(rd["DateSoumission"])
+                    Code = rd.GetInt32(rd.GetOrdinal("Code")),
+                    // autres champs
                 };
             }
 
-            rd.Close();
-            connection.Close();
-            return besoin;
+            return null;
         }
 
 

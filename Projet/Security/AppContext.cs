@@ -7,11 +7,9 @@ namespace Projet.Security
         public static string Username { get; set; }
         public static Role Role { get; set; }
 
-
-        public static bool IsAuthenticated
-        {
-            get { return !string.IsNullOrEmpty(Username); }
-        }
+        
+        public static int UserId { get; set; }
+        
 
         public static bool IsAuthenticated => !string.IsNullOrEmpty(Username);
 

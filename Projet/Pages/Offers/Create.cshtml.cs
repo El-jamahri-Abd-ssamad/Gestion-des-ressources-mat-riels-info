@@ -9,48 +9,22 @@ namespace Projet.Pages.Offers
     {
         [BindProperty]
         public OfferDto Offer { get; set; }
+        public int TenderId { get; set; }
 
         IOfferService service = new OfferService();
-
-        public int TenderId { get; set; }
 
         public void OnGet(int tenderId)
         {
             TenderId = tenderId;
-            // Valeur par défaut pour éviter l'erreur "The Status field is required"
-            Offer = new OfferDto
-            {
-                Status = "Pending"
-            };
         }
 
         public IActionResult OnPost(int tenderId)
         {
-            Console.WriteLine("ON POST CREATE OFFER");
-
             if (!ModelState.IsValid)
-            {
-                Console.WriteLine("MODEL STATE INVALID");
+                return Page();
 
-                foreach (var entry in ModelState)
-                {
-                    foreach (var error in entry.Value.Errors)
-                    {
-                        Console.WriteLine($"ERROR {entry.Key} : {error.ErrorMessage}");
-                    }
-                }
-
-                return Page(); 
-            }
-
-            int supplierId = 1; // temporaire
             Offer.TenderId = tenderId;
-
-            Offer.WarrantyMonths = 0;
-
-            service.CreateOffer(supplierId, Offer);
-
-            Console.WriteLine("OFFER INSERT DONE");
+            service.CreateOffer(1, Offer); // supplier temporaire
 
             return RedirectToPage("/Suppliers/Dashboard");
         }

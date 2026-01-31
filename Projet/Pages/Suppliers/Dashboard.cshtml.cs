@@ -13,8 +13,7 @@ namespace Projet.Pages.Suppliers
 
         public void OnGet()
         {
-            int supplierId = 1;
-            Offers = service.GetOffersBySupplier(supplierId);
+            Offers = service.GetOffersBySupplier(1);
         }
     }
 }

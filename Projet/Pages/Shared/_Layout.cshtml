@@ -50,6 +50,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Maintenance/CreateReport">Rédiger constat (test)</a>
                         </li>
+                        <li>
+                            <a asp-page="/Blacklist/Index" class="nav-link">
+                                🚫 Blacklist
+                            </a>
+
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -58,8 +64,8 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
-            <a asp-page="/Tenders/Index">Appels d’offres</a>
-            <a asp-page="/Suppliers/Dashboard">Dashboard</a>
+            <!-- <a asp-page="/Tenders/Index">Appels d’offres</a>-->
+            <!--<a asp-page="/Suppliers/Dashboard">Dashboard</a>-->
 
             <!-- Liens supplémentaires pour test rapide -->
             <div class="mt-3">
