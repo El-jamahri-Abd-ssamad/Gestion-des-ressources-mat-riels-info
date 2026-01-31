@@ -1,17 +1,22 @@
-﻿namespace Projet.Models
+﻿using Projet.Domain.enums;
+
+namespace Projet.Models
 {
     public class BesoinChefDto
     {
-        public BesoinChefDto(int id, string typeRessource, string description, int quantite, bool valide, DateTime dateSoumission)
+        
+        public BesoinChefDto() { }
+
+        public BesoinChefDto(int code, string typeRessource, string description, int quantite, bool valide, DateTime dateSoumission, StatutBesoin statut)
         {
-            Code = id;
+            Code = code;
             TypeRessource = typeRessource;
             Description = description;
             Quantite = quantite;
             Valide = valide;
             DateSoumission = dateSoumission;
+            Statut = statut;
         }
-        public BesoinChefDto() { }
 
         public int Code { get; set; }
         public string TypeRessource { get; set; }
@@ -19,5 +24,7 @@
         public int Quantite { get; set; }
         public bool Valide { get; set; }
         public DateTime DateSoumission { get; set; }
+        public StatutBesoin Statut { get; set; }
+       
     }
 }

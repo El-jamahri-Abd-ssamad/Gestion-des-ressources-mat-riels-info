@@ -1,8 +1,15 @@
-﻿namespace Projet.Domain
+﻿using Projet.Domain.enums;
+
+namespace Projet.Domain
 {
     public class Besoin
     {
-        public Besoin(int code, int departementId, DateTime dateSoumission, string typeRessource, string description, int quantite, bool valideParChef)
+        
+        public Besoin()
+        {
+        }
+
+        public Besoin(int code, int departementId, DateTime dateSoumission, string typeRessource, string description, int quantite, bool valideParChef, StatutBesoin statut)
         {
             Code = code;
             DepartementId = departementId;
@@ -11,10 +18,8 @@
             Description = description;
             Quantite = quantite;
             ValideParChef = valideParChef;
+            Statut = statut;
         }
-        public Besoin()
-        {
-        }  
 
         public int Code { get; set; }
 
@@ -25,5 +30,6 @@
         public int Quantite { get; set; }
 
         public bool ValideParChef { get; set; }
+        public StatutBesoin Statut { get; set; }
     }
 }

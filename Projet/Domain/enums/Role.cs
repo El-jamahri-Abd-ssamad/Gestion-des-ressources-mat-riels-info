@@ -1,4 +1,4 @@
-﻿namespace Projet.Domain.Enums
+﻿namespace Projet.Domain.enums
 {
     public enum Role
     {

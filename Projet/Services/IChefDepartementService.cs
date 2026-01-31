@@ -11,6 +11,7 @@ namespace Projet.Services
         public void RejeterBesoin(int besoinId);
         public void UpdateBesoin(BesoinChefDto b);
         public void DeleteBesoin(int id);
+        public void EnvoyerBesoinsAuResponsable(int departementId, string nomDepartement);
 
     }
 }

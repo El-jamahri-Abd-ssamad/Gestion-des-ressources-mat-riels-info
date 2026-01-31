@@ -1,25 +1,35 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Projet.Security;
-using Projet.Domain.Enums;
-using Projet.Services;
-using Projet.Models;
-using System.Collections.Generic;
-using AppContext = Projet.Security.AppContext;
 using Projet.Data;
+using Projet.Domain;
+using Projet.Domain.enums;
+using Projet.Models;
+using Projet.Security;
+using Projet.Services;
+using AppContext = Projet.Security.AppContext;
 
 namespace Projet.Pages.ChefDepartement
 {
     public class IndexModel : PageModel
     {
-        private readonly ChefDepartementService _service;
-
-        public List<BesoinChefDto> Besoins { get; set; } = new List<BesoinChefDto>();
+        private readonly ChefDepartementService service;
+        private readonly NotificationDB notificationDb;
+        public List<BesoinChefDto> Besoins { get; set; } = new();
         public string Message { get; set; } = "";
 
         public IndexModel()
         {
-            _service = new ChefDepartementService(new BesoinDB(), new DepartementDB());
+            service = new ChefDepartementService(new Projet.Data.BesoinDB(), new Projet.Data.DepartementDB());
+            notificationDb = new NotificationDB();
+        }
+
+        private void LoadBesoins()
+        {
+            var departement = service.GetDepartementChef(AppContext.Username);
+            if (departement != null)
+            {
+                Besoins = service.GetBesoins(departement.Id);
+            }
         }
 
         public IActionResult OnGet()
@@ -27,47 +37,114 @@ namespace Projet.Pages.ChefDepartement
             if (!AppContext.IsAuthenticated || AppContext.Role != Role.ChefDepartement)
                 return RedirectToPage("/SignIn");
 
-            var departement = _service.GetDepartementChef(AppContext.Username);
-
-            if (departement == null)
-            {
-                Message = "Aucun d�partement associ� � ce compte.";
-                return Page();
-            }
-
-            Besoins = _service.GetBesoins(departement.Id);
+            LoadBesoins();
 
             if (Besoins.Count == 0)
-                Message = "Aucun besoin pour ce d�partement.";
+                Message = "Aucun besoin pour ce département.";
 
             return Page();
         }
 
-        // Valider un besoin
         public IActionResult OnPostValider(int besoinId)
         {
-            _service.ValiderBesoin(besoinId);
+            var b = service.GetBesoinById(besoinId);
+            if (b == null || b.Statut != StatutBesoin.EnAttente)
+            {
+                Message = "Action impossible : ce besoin ne peut pas être validé.";
+            }
+            else
+            {
+                service.ValiderBesoin(besoinId);
+                Message = "Besoin validé avec succès.";
+            }
+
+            LoadBesoins();
             return RedirectToPage();
         }
 
-        // Rejeter un besoin
         public IActionResult OnPostRejeter(int besoinId)
         {
-            _service.RejeterBesoin(besoinId);
+            var b = service.GetBesoinById(besoinId);
+            if (b == null || b.Statut != StatutBesoin.EnAttente)
+            {
+                Message = "Action impossible : ce besoin ne peut pas être rejeté.";
+            }
+            else
+            {
+                service.RejeterBesoin(besoinId);
+                Message = "Besoin rejeté avec succès.";
+            }
+
+            LoadBesoins();
             return RedirectToPage();
         }
 
-        // Supprimer un besoin
         public IActionResult OnPostSupprimer(int besoinId)
         {
-            _service.DeleteBesoin(besoinId);
+            var b = service.GetBesoinById(besoinId);
+            if (b == null || b.Statut != StatutBesoin.EnAttente)
+            {
+                Message = "Action impossible : ce besoin ne peut pas être supprimé.";
+            }
+            else
+            {
+                service.DeleteBesoin(besoinId);
+                Message = "Besoin supprimé avec succès.";
+            }
+
+            LoadBesoins();
+            return Page();
+        }
+
+        public IActionResult OnPostModifier(
+    int besoinId,
+    string TypeRessource,
+    string Description,
+    int Quantite,
+    DateTime DateSoumission)
+        {
+            var b = service.GetBesoinById(besoinId);
+
+            if (b == null || b.Statut != StatutBesoin.EnAttente)
+            {
+                Message = "Modification impossible.";
+                LoadBesoins();
+                return Page();
+            }
+
+            b.TypeRessource = TypeRessource;
+            b.Description = Description;
+            b.Quantite = Quantite;
+            b.DateSoumission = DateSoumission;
+
+            service.UpdateBesoin(b);
+
+            Message = "Besoin modifié avec succès.";
             return RedirectToPage();
         }
 
-        // Modifier un besoin
-        public IActionResult OnPostModifier(int besoinId)
+
+        public IActionResult OnPostEnvoyer()
         {
-            return RedirectToPage("/ChefDepartement/ModifierBesoin", new { id = besoinId });
+            var departement = service.GetDepartementChef(AppContext.Username);
+
+            if (departement == null)
+                return Page();
+
+            service.EnvoyerBesoinsAuResponsable(departement.Id, departement.Nom);
+
+            Message = "Les besoins validés ont été envoyés au responsable des ressources.";
+            LoadBesoins();
+            
+
+            // 🔔 Notification
+            notificationDb.Ajouter(new Notification
+            {
+                Message = $"Nouveaux besoins envoyés par le département {departement.Nom}",
+                DateCreation = DateTime.Now,
+                RoleCible = Role.ResponsableRessources
+            });
+            return Page();
         }
     }
 }
