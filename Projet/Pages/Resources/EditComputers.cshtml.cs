@@ -1,5 +1,4 @@
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Projet.Models;
 using Projet.Services;
@@ -16,7 +15,9 @@ namespace Projet.Pages.Resources
         }
 
         [BindProperty]
-        public ComputerDto Computer { get; set; }
+        public ComputerDto Computer { get; set; } = new ComputerDto();  // ← AJOUT
+
+        public string ErrorMessage { get; set; } = "";  // ← AJOUT
 
         public IActionResult OnGet(string inventoryNumber)
         {
@@ -41,7 +42,7 @@ namespace Projet.Pages.Resources
                 string.IsNullOrWhiteSpace(Computer.InventoryNumber) ||
                 string.IsNullOrWhiteSpace(Computer.Brand))
             {
-                ModelState.AddModelError("", "Remplissez tous les champs obligatoires.");
+                ErrorMessage = "Remplissez tous les champs obligatoires.";
                 return Page();
             }
 
@@ -52,7 +53,7 @@ namespace Projet.Pages.Resources
                 return RedirectToPage("./ManageComputers");
             }
 
-            ModelState.AddModelError("", "Erreur lors de la modification.");
+            ErrorMessage = "Erreur lors de la modification.";
             return Page();
         }
     }

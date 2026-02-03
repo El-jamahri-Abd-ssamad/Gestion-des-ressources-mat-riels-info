@@ -1,54 +1,138 @@
 ﻿@page
 @model Projet.Pages.Resources.EditPrinterModel
+@{
+    ViewData["Title"] = "Modifier l'imprimante";
+}
 
-<h2>Modifier l'Imprimante</h2>
+<style>
+    /* Card style */
+    .card {
+        border-radius: 0.5rem;
+        box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
+    }
 
-<form method="post">
-    <input asp-for="Printer.Id" type="hidden" />
+    /* Form labels */
+    .form-label i {
+        color: #0d6efd; /* Bootstrap primary color */
+    }
 
-    <div>
-        <label>Numéro d'inventaire</label>
-        <input asp-for="Printer.InventoryNumber" readonly />
+    /* Input focus */
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* Buttons */
+    .btn i {
+        vertical-align: middle;
+    }
+
+    /* Row spacing */
+    .row.g-3 > div {
+        margin-bottom: 1rem;
+    }
+
+    /* Header */
+    .page-header i {
+        color: #0d6efd;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .mt-4.d-flex {
+            flex-direction: column-reverse !important;
+            gap: 0.5rem !important;
+        }
+    }
+</style>
+
+<div class="page-header mb-4">
+    <h2 class="mb-0">
+        <i class="fas fa-print me-2"></i>Modifier l’Imprimante
+    </h2>
+    <p class="text-muted">Mettre à jour les informations de l’imprimante</p>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Informations de l’imprimante</h5>
     </div>
-    <div>
-        <label>Marque</label>
-        <input asp-for="Printer.Brand" />
-        <span asp-validation-for="Printer.Brand"></span>
+
+    <div class="card-body">
+        <form method="post">
+            <input asp-for="Printer.Id" type="hidden" />
+
+            <div class="row g-3">
+                <!-- Numéro inventaire -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-barcode me-2"></i>Numéro d'inventaire</label>
+                    <input asp-for="Printer.InventoryNumber" class="form-control" readonly />
+                </div>
+
+                <!-- Marque -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-tag me-2"></i>Marque</label>
+                    <input asp-for="Printer.Brand" class="form-control" />
+                    <span asp-validation-for="Printer.Brand" class="text-danger"></span>
+                </div>
+
+                <!-- Vitesse -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-tachometer-alt me-2"></i>Vitesse d’impression (ppm)</label>
+                    <input asp-for="Printer.PrintSpeed" type="number" class="form-control" />
+                    <span asp-validation-for="Printer.PrintSpeed" class="text-danger"></span>
+                </div>
+
+                <!-- Résolution -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-expand me-2"></i>Résolution</label>
+                    <input asp-for="Printer.Resolution" class="form-control" />
+                    <span asp-validation-for="Printer.Resolution" class="text-danger"></span>
+                </div>
+
+                <!-- Date livraison -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-calendar-alt me-2"></i>Date de livraison</label>
+                    <input asp-for="Printer.DeliveryDate" type="date" class="form-control" />
+                </div>
+
+                <!-- Affecté à -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-user me-2"></i>Affecté à</label>
+                    <input asp-for="Printer.AssignedTo" class="form-control" />
+                    <span asp-validation-for="Printer.AssignedTo" class="text-danger"></span>
+                </div>
+
+                <!-- Type affectation -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-layer-group me-2"></i>Type d'affectation</label>
+                    <select asp-for="Printer.AssignmentType" class="form-select">
+                        <option value="Department">Département</option>
+                        <option value="Teacher">Enseignant</option>
+                    </select>
+                </div>
+
+                <!-- Département -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-building me-2"></i>ID Département</label>
+                    <input asp-for="Printer.DepartmentId" type="number" class="form-control" />
+                </div>
+
+                <!-- Fournisseur -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fas fa-truck me-2"></i>ID Fournisseur</label>
+                    <input asp-for="Printer.SupplierId" type="number" class="form-control" />
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-end gap-2">
+                <a asp-page="./ManagePrinters" class="btn btn-secondary">
+                    <i class="fas fa-times me-2"></i>Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Enregistrer
+                </button>
+            </div>
+        </form>
     </div>
-    <div>
-        <label>Vitesse d'impression (ppm)</label>
-        <input asp-for="Printer.PrintSpeed" type="number" />
-        <span asp-validation-for="Printer.PrintSpeed"></span>
-    </div>
-    <div>
-        <label>Résolution</label>
-        <input asp-for="Printer.Resolution" />
-        <span asp-validation-for="Printer.Resolution"></span>
-    </div>
-    <div>
-        <label>Date de livraison</label>
-        <input asp-for="Printer.DeliveryDate" type="date" />
-    </div>
-    <div>
-        <label>Affecté à</label>
-        <input asp-for="Printer.AssignedTo" />
-        <span asp-validation-for="Printer.AssignedTo"></span>
-    </div>
-    <div>
-        <label>Type d'affectation</label>
-        <select asp-for="Printer.AssignmentType">
-            <option value="Department">Département</option>
-            <option value="Teacher">Enseignant</option>
-        </select>
-    </div>
-    <div>
-        <label>ID Département</label>
-        <input asp-for="Printer.DepartmentId" type="number" />
-    </div>
-    <div>
-        <label>ID Fournisseur</label>
-        <input asp-for="Printer.SupplierId" type="number" />
-    </div>
-    <button type="submit">Enregistrer</button>
-    <a asp-page="./ManagePrinters">Annuler</a>
-</form>
+</div>

@@ -15,7 +15,7 @@ namespace Projet.Pages.Resources
             _computerService = computerService;
         }
 
-        public List<ComputerDto> Computers { get; set; }
+        public List<ComputerDto> Computers { get; set; } = new List<ComputerDto>();  // ← AJOUT
 
         public void OnGet()
         {

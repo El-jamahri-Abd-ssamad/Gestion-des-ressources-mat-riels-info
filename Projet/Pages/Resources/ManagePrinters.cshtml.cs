@@ -15,7 +15,7 @@ namespace Projet.Pages.Resources
             _printerService = printerService;
         }
 
-        public List<PrinterDto> Printers { get; set; }
+        public List<PrinterDto> Printers { get; set; } = new List<PrinterDto>();
 
         public void OnGet()
         {
@@ -24,12 +24,8 @@ namespace Projet.Pages.Resources
 
         public IActionResult OnPostDelete(string inventoryNumber)
         {
-            if (string.IsNullOrWhiteSpace(inventoryNumber))
-            {
-                return Page();
-            }
-
-            bool result = _printerService.DeletePrinter(inventoryNumber);
+            if (!string.IsNullOrWhiteSpace(inventoryNumber))
+                _printerService.DeletePrinter(inventoryNumber);
             return RedirectToPage();
         }
     }

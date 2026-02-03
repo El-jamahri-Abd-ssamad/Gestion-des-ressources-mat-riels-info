@@ -23,13 +23,8 @@ namespace Projet.Data
     {
         private static readonly string connectionString =
                 @"Data Source=(LocalDB)\MSSQLLocalDB;
-                Initial Catalog = dbbb;
-                Integrated Security = True;
-                Connect Timeout = 30;
-                Encrypt=True;
-                TrustServerCertificate=False;
-                ApplicationIntent=ReadWrite;
-                MultiSubnetFailover=False";
+                AttachDbFilename=C:\Users\pc\Documents\GL\projet1\Gestion-des-ressources-mat-riels-info\Projet\Data\dbbb.mdf;
+                Integrated Security=True;";
         public static SqlConnection GetConnection()
         {
             return new SqlConnection(connectionString);
