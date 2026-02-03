@@ -1,41 +1,94 @@
 ﻿@page
 @model Projet.Pages.Resources.ManagePrintersModel
+@{
+    ViewData["Title"] = "Gestion des Imprimantes";
+}
 
-<h2>Gestion des Imprimantes</h2>
-
-<div>
-    <a asp-page="./AddPrinter" class="btn btn-primary">Ajouter une Imprimante</a>
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0">
+            <i class="fas fa-print me-2"></i>Gestion des Imprimantes
+        </h2>
+        <p class="text-muted mb-0">@Model.Printers.Count imprimante(s) enregistrée(s)</p>
+    </div>
+    <a asp-page="./AddPrinter" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Ajouter une Imprimante
+    </a>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>N° Inventaire</th>
-            <th>Marque</th>
-            <th>Vitesse (ppm)</th>
-            <th>Résolution</th>
-            <th>Affecté à</th>
-            <th>Type</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var printer in Model.Printers)
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Liste des Imprimantes</h5>
+        <input type="text"
+               class="form-control form-control-sm"
+               placeholder="Rechercher..."
+               style="width: 250px;">
+    </div>
+
+    <div class="card-body p-0">
+        @if (Model.Printers.Count == 0)
         {
-        <tr>
-            <td>@printer.InventoryNumber</td>
-            <td>@printer.Brand</td>
-            <td>@printer.PrintSpeed</td>
-            <td>@printer.Resolution</td>
-            <td>@printer.AssignedTo</td>
-            <td>@printer.AssignmentType</td>
-            <td>
-                <a asp-page="./EditPrinter" asp-route-inventoryNumber="@printer.InventoryNumber">Modifier</a>
-                <form method="post" asp-page-handler="Delete" asp-route-inventoryNumber="@printer.InventoryNumber" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Supprimer cette imprimante?')">Supprimer</button>
-                </form>
-            </td>
-        </tr>
+            <div class="text-center py-5">
+                <i class="fas fa-print fa-3x text-muted mb-3"></i>
+                <p class="text-muted">Aucune imprimante enregistrée</p>
+                <a asp-page="./AddPrinter" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus me-2"></i>Ajouter la première
+                </a>
+            </div>
         }
-    </tbody>
-</table>
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>N° Inventaire</th>
+                            <th>Marque</th>
+                            <th>Vitesse (ppm)</th>
+                            <th>Résolution</th>
+                            <th>Affecté à</th>
+                            <th>Type</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var printer in Model.Printers)
+                        {
+                            <tr>
+                                <td><strong class="text-primary">@printer.InventoryNumber</strong></td>
+                                <td>@printer.Brand</td>
+                                <td><span class="badge bg-info">@printer.PrintSpeed ppm</span></td>
+                                <td>@printer.Resolution</td>
+                                <td>
+                                    <small class="text-muted">@printer.AssignmentType</small><br />
+                                    <strong>@printer.AssignedTo</strong>
+                                </td>
+                                <td><span class="badge bg-secondary">@printer.AssignmentType</span></td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-page="./EditPrinter"
+                                           asp-route-inventoryNumber="@printer.InventoryNumber"
+                                           class="btn btn-sm btn-warning"
+                                           title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form method="post"
+                                              asp-page-handler="Delete"
+                                              asp-route-inventoryNumber="@printer.InventoryNumber">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette imprimante ?')"
+                                                    title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

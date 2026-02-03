@@ -42,6 +42,8 @@ namespace Projet.Pages
             {
                 Role.Admin => RedirectToPage("/Tenders/Index"),
                 Role.ChefDepartement => RedirectToPage("/ChefDepartement/Index"),
+
+                Role.ResponsableRessources => RedirectToPage("/ResponsableRessources/ResponsableRessources"),
                 Role.Enseignant => RedirectToPage("/Enseignant/Dashboard"),
                 Role.Fournisseur => RedirectToPage("/Suppliers/Dashboard"),
                 Role.Technicien => RedirectToPage("/Maintenance/CreateReport"),

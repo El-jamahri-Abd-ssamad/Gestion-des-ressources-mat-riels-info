@@ -15,43 +15,29 @@ namespace Projet.Pages.Resources
         }
 
         [BindProperty]
-        public PrinterDto Printer { get; set; }
+        public PrinterDto Printer { get; set; } = new PrinterDto();
+
+        public string ErrorMessage { get; set; } = "";
 
         public IActionResult OnGet(string inventoryNumber)
         {
             if (string.IsNullOrWhiteSpace(inventoryNumber))
-            {
                 return RedirectToPage("./ManagePrinters");
-            }
 
             Printer = _printerService.GetPrinterByInventoryNumber(inventoryNumber);
-
-            if (Printer == null)
-            {
-                return RedirectToPage("./ManagePrinters");
-            }
+            if (Printer == null) return RedirectToPage("./ManagePrinters");
 
             return Page();
         }
 
         public IActionResult OnPost()
         {
-            if (Printer == null ||
-                string.IsNullOrWhiteSpace(Printer.InventoryNumber) ||
-                string.IsNullOrWhiteSpace(Printer.Brand))
-            {
-                ModelState.AddModelError("", "Remplissez tous les champs obligatoires.");
-                return Page();
-            }
+            if (Printer == null) return Page();
 
             bool result = _printerService.UpdatePrinter(Printer);
+            if (result) return RedirectToPage("./ManagePrinters");
 
-            if (result)
-            {
-                return RedirectToPage("./ManagePrinters");
-            }
-
-            ModelState.AddModelError("", "Erreur lors de la modification.");
+            ErrorMessage = "Erreur lors de la modification.";
             return Page();
         }
     }

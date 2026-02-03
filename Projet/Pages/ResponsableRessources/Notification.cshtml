@@ -1,0 +1,29 @@
+﻿@page
+@model Projet.Pages.NotificationsModel
+
+<h2 class="mb-4">
+    <i class="fas fa-bell me-2"></i>Notifications
+</h2>
+
+@if (Model.Notifications.Count == 0)
+{
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Aucune notification
+    </div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var n in Model.Notifications)
+        {
+            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start mb-2 shadow-sm">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold"><i class="fas fa-bell me-2 text-primary"></i>@n.Title</div>
+                    @n.Message
+                </div>
+                <small class="text-muted">@n.DateCreation.ToString("g")</small>
+            </div>
+        }
+    </div>
+}
