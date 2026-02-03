@@ -31,5 +31,6 @@ namespace Projet.Domain
 
         public bool ValideParChef { get; set; }
         public StatutBesoin Statut { get; set; }
+        public int? AppelOffreId { get; set; }
     }
 }

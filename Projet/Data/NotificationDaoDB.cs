@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Projet.Domain;
+using Projet.Domain.enums;
 using Projet.Domain.Enums;
 using System;
 using System.Collections.Generic;

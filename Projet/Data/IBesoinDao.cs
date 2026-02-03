@@ -1,4 +1,5 @@
 ﻿using Projet.Domain;
+using Projet.Domain.enums;
 
 namespace Projet.Data
 {
@@ -13,5 +14,7 @@ namespace Projet.Data
         public bool UpdateBesoin(Besoin besoin);
         public Besoin GetBesoinById(int id);
         void EnvoyerBesoinsValides(int departementId);
+        List<Besoin> GetBesoinsEnvoyes();
+        void UpdateStatut(int besoinCode, StatutBesoin statut);
     }
 }

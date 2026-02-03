@@ -13,14 +13,14 @@ namespace Projet.Pages.ChefDepartement
     public class IndexModel : PageModel
     {
         private readonly ChefDepartementService service;
-        private readonly NotificationDB notificationDb;
+        //private readonly NotificationDB notificationDb;
         public List<BesoinChefDto> Besoins { get; set; } = new();
         public string Message { get; set; } = "";
 
         public IndexModel()
         {
             service = new ChefDepartementService(new Projet.Data.BesoinDB(), new Projet.Data.DepartementDB());
-            notificationDb = new NotificationDB();
+            //notificationDb = new NotificationDB();
         }
 
         private void LoadBesoins()
@@ -138,12 +138,12 @@ namespace Projet.Pages.ChefDepartement
             
 
             // 🔔 Notification
-            notificationDb.Ajouter(new Notification
-            {
-                Message = $"Nouveaux besoins envoyés par le département {departement.Nom}",
-                DateCreation = DateTime.Now,
-                RoleCible = Role.ResponsableRessources
-            });
+            //notificationDb.Ajouter(new Notification
+            //{
+            //    Message = $"Nouveaux besoins envoyés par le département {departement.Nom}",
+            //    DateCreation = DateTime.Now,
+            //    RoleCible = Role.ResponsableRessources
+            //});
             return Page();
         }
     }

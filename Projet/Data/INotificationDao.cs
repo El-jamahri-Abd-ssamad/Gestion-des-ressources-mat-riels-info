@@ -1,4 +1,5 @@
 ﻿using Projet.Domain;
+using Projet.Domain.enums;
 using Projet.Domain.Enums;
 using System.Collections.Generic;
 
