@@ -9,6 +9,31 @@ namespace Projet.Data
 {
     public class BesoinDaoDB : IBesoinDao
     {
+        public void AddBesoin(Besoin besoin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteBesoin(int besoinId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnvoyerBesoinsValides(int departementId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Besoin GetBesoinById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Besoin> GetBesoinsByDepartement(int departementId)
+        {
+            throw new NotImplementedException();
+        }
+
         // =========================
         // GET BESOINS ENVOYÉS
         // =========================
@@ -37,6 +62,21 @@ namespace Projet.Data
             return list;
         }
 
+        public List<Besoin> GetBesoinsValidesByDepartement(int departementId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RejectBesoin(int besoinId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateBesoin(Besoin besoin)
+        {
+            throw new NotImplementedException();
+        }
+
         // =========================
         // UPDATE STATUT
         // =========================
@@ -56,7 +96,12 @@ namespace Projet.Data
             }
         }
 
-      
+        public void ValidateBesoin(int besoinId)
+        {
+            throw new NotImplementedException();
+        }
+
+
 
         // =========================
         // MAPPING CENTRALISÉ

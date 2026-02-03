@@ -7,7 +7,14 @@ namespace Projet.Data
     public class DbFactory
     {
         private static readonly string connectionString =
-            @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=""D:\dernier ve\Gestion-des-ressources-mat-riels-info\Projet\Data\db1.mdf"";Integrated Security=True";
+            @"Data Source=(LocalDB)\MSSQLLocalDB;
+                Initial Catalog = PRJT;
+                Integrated Security = True;
+                Connect Timeout = 30;
+                Encrypt=True;
+                TrustServerCertificate=False;
+                ApplicationIntent=ReadWrite;
+                MultiSubnetFailover=False";
 
         public static SqlConnection GetConnection()
         {
