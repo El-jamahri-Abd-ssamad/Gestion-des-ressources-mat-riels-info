@@ -1,0 +1,140 @@
+﻿@page
+@model Projet.Pages.ResponsableRessources.IndexModel
+@{
+    ViewData["Title"] = "Responsable des ressources";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- SECTION NOTIFICATIONS -->
+    @if (Model.Notifications != null && Model.Notifications.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                @foreach (var n in Model.Notifications)
+                {
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="bi bi-bell-fill me-2"></i>
+                        <strong>@n.Message</strong>
+                        <small class="text-muted ms-2">(@n.DateCreation.ToString("dd/MM/yyyy HH:mm"))</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- SECTION BESOINS -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="bi bi-inbox-fill me-2"></i>
+                        Besoins envoyés par les départements
+                    </h2>
+                    <p class="text-muted">@Model.BesoinsEnvoyes.Count besoin(s) enregistré(s)</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Liste des Besoins</h5>
+                        <input type="text" class="form-control form-control-sm w-25" placeholder="Rechercher...">
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    @if (Model.BesoinsEnvoyes != null && Model.BesoinsEnvoyes.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="px-4 py-3">
+                                            <i class="bi bi-building me-2"></i>Département
+                                        </th>
+                                        <th class="px-4 py-3">
+                                            <i class="bi bi-box-seam me-2"></i>Type ressource
+                                        </th>
+                                        <th class="px-4 py-3 text-center">
+                                            <i class="bi bi-123 me-2"></i>Quantité
+                                        </th>
+                                        <th class="px-4 py-3 text-center">
+                                            <i class="bi bi-info-circle me-2"></i>Statut
+                                        </th>
+                                        <th class="px-4 py-3 text-center">
+                                            <i class="bi bi-file-text me-2"></i>Appel d'offre
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var besoin in Model.BesoinsEnvoyes)
+                                    {
+                                        <tr>
+                                            <td class="px-4 py-3">
+                                                <strong>@besoin.NomDepartement</strong>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                @besoin.TypeRessource
+                                            </td>
+                                            <td class="px-4 py-3 text-center">
+                                                <span class="badge bg-primary rounded-pill px-3 py-2">
+                                                    @besoin.Quantite
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 text-center">
+                                                <span class="badge" style="background-color: #00BCD4; color: white; padding: 8px 16px;">
+                                                    Envoyé
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 text-center">
+                                                @if (besoin.AppelOffreId.HasValue)
+                                                {
+                                                    <span class="badge bg-success px-3 py-2">
+                                                        AO-@besoin.AppelOffreId
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-5 text-center">
+                            <i class="bi bi-inbox display-1 text-muted"></i>
+                            <h5 class="text-muted mt-3">Aucun besoin envoyé</h5>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 8px;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(103, 58, 183, 0.05);
+    }
+
+    thead th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .alert {
+        border-left: 4px solid #0dcaf0;
+    }
+</style>

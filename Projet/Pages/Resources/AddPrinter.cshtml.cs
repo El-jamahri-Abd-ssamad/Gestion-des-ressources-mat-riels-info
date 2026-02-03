@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Projet.Models;
 using Projet.Services;
+using Projet.Domain.Enums; // Pour Role
 using System;
 
 namespace Projet.Pages.Resources
@@ -9,15 +10,18 @@ namespace Projet.Pages.Resources
     public class AddPrinterModel : PageModel
     {
         private readonly IPrinterService _printerService;
+        private readonly INotificationService _notificationService; // 🔹 Inject notification
 
-        public AddPrinterModel(IPrinterService printerService)
+        public AddPrinterModel(IPrinterService printerService, INotificationService notificationService)
         {
             _printerService = printerService;
-            Printer = new PrinterDto();
+            _notificationService = notificationService; // 🔹 Init notification
         }
 
         [BindProperty]
-        public PrinterDto Printer { get; set; }
+        public PrinterDto Printer { get; set; } = new PrinterDto();
+
+        public string ErrorMessage { get; set; } = "";
 
         public void OnGet()
         {
@@ -27,22 +31,25 @@ namespace Projet.Pages.Resources
 
         public IActionResult OnPost()
         {
-            if (Printer == null ||
-                string.IsNullOrWhiteSpace(Printer.InventoryNumber) ||
-                string.IsNullOrWhiteSpace(Printer.Brand))
+            if (Printer == null || string.IsNullOrWhiteSpace(Printer.InventoryNumber))
             {
-                ModelState.AddModelError("", "Remplissez tous les champs obligatoires.");
+                ErrorMessage = "Remplissez tous les champs obligatoires.";
                 return Page();
             }
 
+            // Ajouter l'imprimante
             bool result = _printerService.AddPrinter(Printer);
-
             if (result)
             {
+                // 🔹 Ajouter une notification pour le responsable des ressources
+                string title = "Nouvelle imprimante ajoutée";
+                string message = $"Imprimante {Printer.Brand} ({Printer.InventoryNumber}) ajoutée avec succès.";
+                _notificationService.AddNotification(title, message, Role.ResponsableRessources);
+
                 return RedirectToPage("./ManagePrinters");
             }
 
-            ModelState.AddModelError("", "Erreur lors de l'ajout de l'imprimante.");
+            ErrorMessage = "Erreur lors de l'ajout.";
             return Page();
         }
     }

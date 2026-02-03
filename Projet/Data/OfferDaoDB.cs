@@ -31,6 +31,22 @@ namespace Projet.Data
                 return (int)cmd.ExecuteScalar();
             }
         }
+        public void AddNotification(string message, Role role)
+        {
+            using (SqlConnection cn = DbFactory.GetConnection())
+            using (SqlCommand cmd = new SqlCommand(
+                @"INSERT INTO Notification (Message, DestinataireRole, DateCreation)
+          VALUES (@Message, @Role, GETDATE())", cn))
+            {
+                cmd.Parameters.AddWithValue("@Message", message);
+                cmd.Parameters.AddWithValue("@Role", (int)role);
+
+                cn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
 
         // =========================
         // GET ALL
