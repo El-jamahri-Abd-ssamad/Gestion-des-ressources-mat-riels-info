@@ -2,9 +2,11 @@
 {
     public enum StatutBesoin
     {
-        EnAttente = 1,
-        Envoye = 2,
-        Rejete = 3,
+        EnAttente = 0,
+        Valide = 1,
+        Rejete = 2,
+        Envoye = 3,
         InclusDansAppelOffre = 4
     }
+
 }

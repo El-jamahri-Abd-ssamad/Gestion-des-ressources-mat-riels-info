@@ -1,0 +1,28 @@
+﻿using Projet.Domain.enums;
+using System.ComponentModel.DataAnnotations;
+
+namespace Projet.Models
+{
+    public class BesoinDto
+    {
+        [Required]
+        public string TypeRessource { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Range(1, 100)]
+        public int Quantite { get; set; }
+        public StatutBesoin Statut { get; set; }
+
+        public BesoinDto() { }
+
+        public BesoinDto(string typeRessource, string description, int quantite, StatutBesoin statut)
+        {
+            TypeRessource = typeRessource;
+            Description = description;
+            Quantite = quantite;
+            Statut = statut;
+        }
+    }
+}

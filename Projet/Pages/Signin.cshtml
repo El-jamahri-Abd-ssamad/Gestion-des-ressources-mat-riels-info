@@ -1,55 +1,477 @@
 ﻿@page
 @model Projet.Pages.SignInModel
 @{
-    
-    Layout = null;
-
+    ViewData["Title"] = "Connexion";
 }
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-<div class="signin-container">
-    <div class="signin-left">
-        <img src="~/images/logo-raedeef.png" alt="Logo RADEEF" class="signin-logo" />
-        <h2 class="signin-title">Bienvenue de retour !</h2>
-        <p class="signin-subtitle">Connectez-vous pour accéder à votre espace.</p>
-
-        <form method="post" novalidate>
-            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-            {
-                <div class="signin-error">@Model.ErrorMessage</div>
-            }
-
-            <div class="signin-group mb-3">
-                <label asp-for="Input.Username" class="signin-label">Nom d'utilisateur</label>
-                <input asp-for="Input.Username" class="signin-input" placeholder="Entrez votre nom d'utilisateur" />
-                <span asp-validation-for="Input.Username" class="signin-validation"></span>
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <!-- Left Side - Image/Illustration -->
+        <div class="auth-left">
+            <div class="auth-overlay">
+                <div class="auth-content">
+                    <h1 class="auth-brand">Gestionnaire de Ressources</h1>
+                    <p class="auth-tagline">Gérez facilement les ressources matérielles de tous les départements de la faculté.</p>
+                    <div class="auth-features">
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>Gestion simplifiée des besoins</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>Suivi en temps réel</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>Collaboration efficace</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="signin-group mb-3">
-                <label asp-for="Input.Password" class="signin-label">Mot de passe</label>
-                <input asp-for="Input.Password" type="password" class="signin-input" placeholder="Votre mot de passe" />
-                <span asp-validation-for="Input.Password" class="signin-validation"></span>
+        <!-- Right Side - Login Form -->
+        <div class="auth-right">
+            <div class="auth-form-container">
+                <div class="auth-header">
+                    <h2 class="auth-title">Connexion</h2>
+                    <p class="auth-subtitle">Bienvenue ! Veuillez vous connecter à votre compte.</p>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger alert-custom">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        @Model.ErrorMessage
+                    </div>
+                }
+
+                <form method="post" class="auth-form">
+                    <div class="form-group">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person"></i>
+                            Nom d'utilisateur
+                        </label>
+                        <input type="text"
+                               class="form-control form-control-custom"
+                               id="username"
+                               name="Username"
+                               placeholder="Entrez votre nom d'utilisateur"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock"></i>
+                            Mot de passe
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input type="password"
+                                   class="form-control form-control-custom"
+                                   id="password"
+                                   name="Password"
+                                   placeholder="Entrez votre mot de passe"
+                                   required>
+                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                <i class="bi bi-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">
+                                Se souvenir de moi
+                            </label>
+                        </div>
+                        <a href="#" class="forgot-password">Mot de passe oublié?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-custom w-100">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Se connecter
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Vous n'avez pas de compte? <a href="/Registration" class="auth-link">S'inscrire</a></p>
+                </div>
+
+                <div class="divider">
+                    <span>OU</span>
+                </div>
+
+                <div class="quick-access">
+                    <p class="quick-access-title">Accès rapide</p>
+                    <div class="quick-access-buttons">
+                        <a href="/" class="btn btn-outline-custom">
+                            <i class="bi bi-house-door"></i>
+                            Accueil
+                        </a>
+                        <a href="/About" class="btn btn-outline-custom">
+                            <i class="bi bi-info-circle"></i>
+                            À propos
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <div class="signin-check mb-3">
-                <input type="checkbox" id="keepLogged" class="signin-checkbox" />
-                <label for="keepLogged" class="signin-check-label">Se souvenir de moi</label>
-            </div>
-
-            <button type="submit" class="signin-btn">Se connecter</button>
-
-            <div class="signin-links mt-3">
-                <a href="/ForgotPassword" class="signin-link">Mot de passe oublié ?</a>
-                <a href="/Registration" class="signin-link">Créer un compte</a>
-            </div>
-        </form>
-    </div>
-
-    <div class="signin-right">
-        <img src="~/images/illustration-signin.png" alt="Illustration" class="signin-img" />
+        </div>
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('bi-eye');
+            toggleIcon.classList.add('bi-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('bi-eye-slash');
+            toggleIcon.classList.add('bi-eye');
+        }
+    }
+</script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    /* ==================== Auth Wrapper ==================== */
+    .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .auth-container {
+        display: flex;
+        width: 100%;
+        max-width: 1200px;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ==================== Left Side ==================== */
+    .auth-left {
+        flex: 1;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .auth-left::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+
+        .auth-left::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -50px;
+            left: -50px;
+        }
+
+    .auth-overlay {
+        position: relative;
+        z-index: 1;
+    }
+
+    .auth-content {
+        color: white;
+    }
+
+    .auth-brand {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .auth-tagline {
+        font-size: 1.1rem;
+        margin-bottom: 3rem;
+        opacity: 0.95;
+        line-height: 1.6;
+    }
+
+    .auth-features {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1.05rem;
+    }
+
+        .feature-item i {
+            font-size: 1.5rem;
+            color: #a8d5ff;
+        }
+
+    /* ==================== Right Side ==================== */
+    .auth-right {
+        flex: 1;
+        padding: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .auth-form-container {
+        width: 100%;
+        max-width: 450px;
+    }
+
+    .auth-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .auth-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    /* ==================== Form Styles ==================== */
+    .auth-form {
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+        .form-label i {
+            color: #667eea;
+        }
+
+    .form-control-custom {
+        padding: 0.875rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+        .form-control-custom:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+    .password-input-wrapper {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        padding: 0.25rem;
+        transition: color 0.3s ease;
+    }
+
+        .password-toggle:hover {
+            color: #667eea;
+        }
+
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-check-input:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+
+    .form-check-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .forgot-password {
+        color: #667eea;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+        .forgot-password:hover {
+            color: #764ba2;
+        }
+
+    /* ==================== Buttons ==================== */
+    .btn-custom {
+        padding: 0.875rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+    /* ==================== Auth Footer ==================== */
+    .auth-footer {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #6c757d;
+    }
+
+    .auth-link {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+        .auth-link:hover {
+            color: #764ba2;
+        }
+
+    /* ==================== Divider ==================== */
+    .divider {
+        position: relative;
+        text-align: center;
+        margin: 2rem 0;
+    }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e9ecef;
+        }
+
+        .divider span {
+            position: relative;
+            background: white;
+            padding: 0 1rem;
+            color: #6c757d;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+    /* ==================== Quick Access ==================== */
+    .quick-access {
+        text-align: center;
+    }
+
+    .quick-access-title {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .quick-access-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-outline-custom {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+        .btn-outline-custom:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+
+    /* ==================== Alert ==================== */
+    .alert-custom {
+        border-radius: 10px;
+        border: none;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* ==================== Responsive ==================== */
+    
+</style>

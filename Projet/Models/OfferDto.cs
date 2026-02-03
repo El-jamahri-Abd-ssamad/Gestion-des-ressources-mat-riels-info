@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Projet.Models
 {
@@ -8,11 +9,13 @@ namespace Projet.Models
         public int TenderId { get; set; }
         public int SupplierId { get; set; }
 
+        [Required]
+        [Range(1, double.MaxValue)]
         public decimal TotalPrice { get; set; }
         public int WarrantyMonths { get; set; }
         public string Status { get; set; }
 
-        // utilisé plus tard si tu veux détailler l’offre
+        // pour détailler l’offre
         public List<OfferItemDto> Items { get; set; } = new List<OfferItemDto>();
     }
 }

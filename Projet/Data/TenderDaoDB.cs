@@ -121,5 +121,19 @@ namespace Projet.Data
 
             return list;
         }
+
+        public void UpdateStatus(int tenderId, TenderStatus status)
+        {
+            using (SqlConnection cn = DbFactory.GetConnection())
+            using (SqlCommand cmd = new SqlCommand(
+                "UPDATE Tender SET Status=@s WHERE Id=@id", cn))
+            {
+                cmd.Parameters.AddWithValue("@s", status.ToString());
+                cmd.Parameters.AddWithValue("@id", tenderId);
+                cn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
     }
 }

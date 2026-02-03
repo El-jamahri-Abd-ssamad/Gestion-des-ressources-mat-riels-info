@@ -1,0 +1,877 @@
+﻿@page
+@model Projet.Pages.ChefDepartement.IndexModel
+@using Projet.Domain.enums
+@{
+    ViewData["Title"] = "Dashboard Chef de Département";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<div class="d-flex vh-100 bg-light">
+
+    <!-- Sidebar -->
+    <nav class="sidebar shadow-sm">
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <div class="avatar-circle">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            </div>
+            <h5 class="user-name">@Projet.Security.AppContext.Username</h5>
+            <span class="user-role">@Projet.Security.AppContext.Role.ToString()</span>
+        </div>
+
+        <ul class="nav flex-column sidebar-nav">
+            <li class="nav-item">
+                <a href="/ChefDepartement/Index" class="nav-link active">
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Accueil</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/ChefDepartement/Profil" class="nav-link">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Profil</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Enseignants</span>
+                </a>
+            </li>
+            
+            <li class="nav-item mt-auto">
+                <a asp-page="/Logout" class="nav-link logout-link">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Liste des besoins</h1>
+                    <p class="page-subtitle">Gérez et validez les besoins du département</p>
+                </div>
+                <div class="header-actions">
+                    @if (Model.Besoins.Any(b => b.Statut == StatutBesoin.Valide))
+                    {
+                        <form method="post" asp-page-handler="Envoyer" class="d-inline">
+                            <button class="btn btn-primary btn-send">
+                                <i class="bi bi-send-fill me-2"></i>
+                                Envoyer au responsable
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <div class="alert alert-success alert-custom">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    @Model.Message
+                </div>
+            }
+
+            <!-- Search and filters -->
+            <div class="filters-section">
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un besoin...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="btn btn-filter active" data-status="all">Tout</button>
+                    <button class="btn btn-filter" data-status="EnAttente">En attente</button>
+                    <button class="btn btn-filter" data-status="Valide">Validé</button>
+                    <button class="btn btn-filter" data-status="Rejete">Rejeté</button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="card table-card">
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                            <tr>
+                                <th width="50"></th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Quantité</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th width="200">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var besoin in Model.Besoins)
+                            {
+                                <tr class="table-row" data-status="@besoin.Statut">
+                                    <td>
+                                        <div class="product-icon">
+                                            <i class="bi bi-box"></i>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="product-type">@besoin.TypeRessource</span>
+                                    </td>
+                                    <td>
+                                        <span class="product-description">@besoin.Description</span>
+                                    </td>
+                                    <td>
+                                        <span class="quantity-badge">@besoin.Quantite</span>
+                                    </td>
+                                    <td>
+                                        <span class="date-text">@besoin.DateSoumission.ToShortDateString()</span>
+                                    </td>
+                                    <td>
+                                        @switch (besoin.Statut)
+                                        {
+                                            case StatutBesoin.EnAttente:
+                                                <span class="status-badge status-warning">
+                                                    <i class="bi bi-clock"></i>
+                                                    En attente
+                                                </span>
+                                                break;
+                                            case StatutBesoin.Valide:
+                                                <span class="status-badge status-success">
+                                                    <i class="bi bi-check-circle"></i>
+                                                    Validé
+                                                </span>
+                                                break;
+                                            case StatutBesoin.Rejete:
+                                                <span class="status-badge status-danger">
+                                                    <i class="bi bi-x-circle"></i>
+                                                    Rejeté
+                                                </span>
+                                                break;
+                                            case StatutBesoin.Envoye:
+                                                <span class="status-badge status-info">
+                                                    <i class="bi bi-send"></i>
+                                                    Envoyé
+                                                </span>
+                                                break;
+                                            default:
+                                                <span class="status-badge status-secondary">Autre</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            @if (besoin.Statut == StatutBesoin.EnAttente)
+                                            {
+                                                <button class="btn btn-sm btn-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#detailsModal"
+                                                        data-id="@besoin.Code"
+                                                        data-type="@besoin.TypeRessource"
+                                                        data-description="@besoin.Description"
+                                                        data-quantite="@besoin.Quantite"
+                                                        data-date="@besoin.DateSoumission.ToString("yyyy-MM-dd")">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+
+
+
+
+                                                <form method="post" asp-page-handler="Valider" class="d-inline">
+                                                    <input type="hidden" name="besoinId" value="@besoin.Code" />
+                                                    <button class="btn-action btn-action-success" title="Valider">
+                                                        <i class="bi bi-check-lg"></i>
+                                                    </button>
+                                                </form>
+                                                <form method="post" asp-page-handler="Rejeter" class="d-inline">
+                                                    <input type="hidden" name="besoinId" value="@besoin.Code" />
+                                                    <button class="btn-action btn-action-danger" title="Rejeter">
+                                                        <i class="bi bi-x-lg"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="no-action">—</span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="table-footer">
+                    <div class="pagination-info">
+                        Affichage de <strong>1-10</strong> sur <strong>@Model.Besoins.Count()</strong> résultats
+                    </div>
+                    <nav>
+                        <ul class="pagination custom-pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal détails -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modal-custom">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Détails du besoin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="post" asp-page-handler="Modifier">
+                <div class="modal-body">
+
+                    <input type="hidden" name="besoinId" id="mId" />
+
+                    <div class="mb-2">
+                        <label>Type</label>
+                        <input type="text" name="TypeRessource" id="mType" class="form-control" readonly />
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Description</label>
+                        <textarea name="Description" id="mDescription" class="form-control" readonly></textarea>
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Quantité</label>
+                        <input type="number" name="Quantite" id="mQuantite" class="form-control" readonly />
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Date</label>
+                        <input type="date" name="DateSoumission" id="mDate" class="form-control" readonly />
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnModifier" class="btn btn-primary">
+                        Modifier
+                    </button>
+
+                    <button type="submit" id="btnEnregistrer" class="btn btn-success d-none">
+                        Enregistrer
+                    </button>
+
+                    <button type="button" id="btnAnnuler" class="btn btn-secondary d-none">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.btn-filter');
+        const rows = document.querySelectorAll('.table-row');
+
+        let currentStatus = 'all';
+
+        // 🔍 Recherche texte
+        searchInput.addEventListener('input', function () {
+            applyFilters();
+        });
+
+        // 🎛️ Boutons de statut
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                currentStatus = this.dataset.status;
+                applyFilters();
+            });
+        });
+
+        function applyFilters() {
+            const searchValue = searchInput.value.toLowerCase();
+
+            rows.forEach(row => {
+                const rowText = row.innerText.toLowerCase();
+                const rowStatus = row.dataset.status;
+
+                const matchText = rowText.includes(searchValue);
+                const matchStatus = currentStatus === 'all' || rowStatus === currentStatus;
+
+                row.style.display = (matchText && matchStatus) ? '' : 'none';
+            });
+        }
+    </script>
+
+    <script>
+        var modal = document.getElementById('detailsModal');
+
+        var btnModifier = document.getElementById('btnModifier');
+        var btnEnregistrer = document.getElementById('btnEnregistrer');
+        var btnAnnuler = document.getElementById('btnAnnuler');
+
+        modal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+
+            document.getElementById('mId').value = button.dataset.id;
+            document.getElementById('mType').value = button.dataset.type;
+            document.getElementById('mDescription').value = button.dataset.description;
+            document.getElementById('mQuantite').value = button.dataset.quantite;
+            document.getElementById('mDate').value = button.dataset.date;
+
+            setReadonly(true);
+        });
+
+        btnModifier.onclick = function () {
+            setReadonly(false);
+        };
+
+        btnAnnuler.onclick = function () {
+            setReadonly(true);
+        };
+
+        function setReadonly(readonly) {
+            document.getElementById('mType').readOnly = readonly;
+            document.getElementById('mDescription').readOnly = readonly;
+            document.getElementById('mQuantite').readOnly = readonly;
+            document.getElementById('mDate').readOnly = readonly;
+
+            btnModifier.classList.toggle('d-none', !readonly);
+            btnEnregistrer.classList.toggle('d-none', readonly);
+            btnAnnuler.classList.toggle('d-none', readonly);
+        }
+    </script>
+
+
+
+<style>
+    /* ==================== Global Styles ==================== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #2c3e50;
+    }
+
+    /* ==================== Sidebar ==================== */
+    .sidebar {
+        width: 260px;
+        background: #ffffff;
+        border-right: 1px solid #e9ecef;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        position: relative;
+    }
+
+    .sidebar-header {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .user-avatar {
+        margin-bottom: 1rem;
+    }
+
+    .avatar-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .user-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .user-role {
+        font-size: 0.875rem;
+        color: #6c757d;
+        display: block;
+    }
+
+    .sidebar-nav {
+        padding: 1rem 0.75rem;
+        flex: 1;
+    }
+
+        .sidebar-nav .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #6c757d;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+            .sidebar-nav .nav-link i {
+                font-size: 1.25rem;
+                margin-right: 0.75rem;
+                width: 24px;
+            }
+
+            .sidebar-nav .nav-link:hover {
+                background-color: #f8f9fa;
+                color: #667eea;
+            }
+
+            .sidebar-nav .nav-link.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+
+    .logout-link {
+        color: #dc3545 !important;
+        margin-top: auto;
+    }
+
+        .logout-link:hover {
+            background-color: #fff5f5 !important;
+            color: #dc3545 !important;
+        }
+
+    /* ==================== Main Content ==================== */
+    .main-content {
+        flex: 1;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+    }
+
+    .content-wrapper {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* ==================== Page Header ==================== */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn-send {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+    /* ==================== Alerts ==================== */
+    .alert-custom {
+        border-radius: 10px;
+        border: none;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* ==================== Filters Section ==================== */
+    .filters-section {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .search-box {
+        position: relative;
+        flex: 1;
+        min-width: 250px;
+    }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1rem;
+        }
+
+        .search-box .form-control {
+            padding-left: 2.75rem;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            height: 45px;
+            transition: all 0.3s ease;
+        }
+
+            .search-box .form-control:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+
+    .filter-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-filter {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        background: white;
+        color: #6c757d;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .btn-filter:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .btn-filter.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+    /* ==================== Table Card ==================== */
+    .table-card {
+        background: white;
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .table-custom {
+        margin: 0;
+    }
+
+        .table-custom thead {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+            .table-custom thead th {
+                padding: 1rem 1.25rem;
+                font-weight: 600;
+                font-size: 0.875rem;
+                color: #6c757d;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border: none;
+            }
+
+        .table-custom tbody tr {
+            border-bottom: 1px solid #f1f3f5;
+            transition: all 0.2s ease;
+        }
+
+            .table-custom tbody tr:hover {
+                background-color: #f8f9fa;
+            }
+
+        .table-custom tbody td {
+            padding: 1.25rem 1.25rem;
+            vertical-align: middle;
+            border: none;
+        }
+
+    /* ==================== Table Elements ==================== */
+    .product-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .product-type {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .product-description {
+        color: #6c757d;
+        font-size: 0.925rem;
+    }
+
+    .quantity-badge {
+        background-color: #f1f3f5;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-weight: 600;
+        color: #495057;
+        display: inline-block;
+    }
+
+    .date-text {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    /* ==================== Status Badges ==================== */
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+        .status-badge i {
+            font-size: 0.875rem;
+        }
+
+    .status-warning {
+        background-color: #fff3cd;
+        color: #997404;
+    }
+
+    .status-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .status-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-secondary {
+        background-color: #e9ecef;
+        color: #495057;
+    }
+
+    /* ==================== Action Buttons ==================== */
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .btn-action-primary {
+        background-color: #e7f1ff;
+        color: #0d6efd;
+    }
+
+        .btn-action-primary:hover {
+            background-color: #0d6efd;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .btn-action-success {
+        background-color: #d4edda;
+        color: #28a745;
+    }
+
+        .btn-action-success:hover {
+            background-color: #28a745;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .btn-action-danger {
+        background-color: #f8d7da;
+        color: #dc3545;
+    }
+
+        .btn-action-danger:hover {
+            background-color: #dc3545;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .no-action {
+        color: #adb5bd;
+        font-size: 1.25rem;
+    }
+
+    /* ==================== Table Footer ==================== */
+    .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        border-top: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+    }
+
+    .pagination-info {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .custom-pagination {
+        margin: 0;
+    }
+
+        .custom-pagination .page-link {
+            border: 1px solid #e9ecef;
+            color: #6c757d;
+            padding: 0.5rem 0.75rem;
+            margin: 0 0.125rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+            .custom-pagination .page-link:hover {
+                background-color: #f8f9fa;
+                color: #667eea;
+                border-color: #667eea;
+            }
+
+        .custom-pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+            color: white;
+        }
+
+    /* ==================== Modal ==================== */
+    .modal-custom .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 12px 12px 0 0;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .modal-custom .modal-title {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-custom .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    .modal-custom .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-loading {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+    }
+
+    .product-details {
+        padding: 1rem;
+    }
+
+    .detail-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+        .detail-section:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-value {
+        font-size: 1rem;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    
+</style>

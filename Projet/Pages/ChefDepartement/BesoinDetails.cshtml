@@ -1,0 +1,42 @@
+﻿@page
+@model Projet.Pages.ChefDepartement.BesoinDetailsModel
+
+@using Projet.Domain.enums
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <i class="bi bi-info-circle me-2"></i>
+        Détails du besoin
+    </h5>
+</div>
+
+<div class="modal-body">
+
+    <p><strong>Type :</strong> @Model.Besoin.TypeRessource</p>
+    <p><strong>Description :</strong> @Model.Besoin.Description</p>
+    <p><strong>Quantité :</strong> @Model.Besoin.Quantite</p>
+    <p><strong>Date :</strong> @Model.Besoin.DateSoumission.ToShortDateString()</p>
+
+    <p>
+        <strong>Statut :</strong>
+        <span class="badge bg-info">
+            @Model.Besoin.Statut
+        </span>
+    </p>
+
+</div>
+
+<div class="modal-footer">
+    @if (Model.Besoin.Statut == StatutBesoin.EnAttente)
+    {
+        <a asp-page="/ChefDepartement/ModifierBesoin"
+           asp-route-id="@Model.Besoin.Code"
+           class="btn btn-primary">
+            <i class="bi bi-pencil"></i>
+            Modifier
+        </a>
+    }
+    <button class="btn btn-secondary" data-bs-dismiss="modal">
+        Fermer
+    </button>
+</div>

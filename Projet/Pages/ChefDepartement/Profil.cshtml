@@ -1,0 +1,809 @@
+﻿@page
+@model Projet.Pages.ProfileModel
+@using Projet.Domain.enums
+@{
+    ViewData["Title"] = "Profil Utilisateur";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<div class="d-flex vh-100 bg-light">
+
+    <!-- Sidebar -->
+    <nav class="sidebar shadow-sm">
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <div class="avatar-circle">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            </div>
+            <h5 class="user-name">@Model.User.Username</h5>
+            <span class="user-role">@Model.User.Role.ToString()</span>
+        </div>
+
+        <ul class="nav flex-column sidebar-nav">
+            <li class="nav-item">
+                <a href="/" class="nav-link">
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Accueil</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Profile" class="nav-link active">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Mon Profil</span>
+                </a>
+            </li>
+            <li class="nav-item mt-auto">
+                <a asp-page="/Logout" class="nav-link logout-link">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Déconnexion</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Mon Profil</h1>
+                    <p class="page-subtitle">Gérez vos informations personnelles</p>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <div class="alert alert-success alert-custom">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    @Model.Message
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="alert alert-danger alert-custom">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    @Model.ErrorMessage
+                </div>
+            }
+
+            <!-- Profile Content -->
+            <div class="row">
+                <!-- Profile Card -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card profile-card">
+                        <div class="card-body text-center">
+                            <div class="profile-avatar-large">
+                                <i class="bi bi-person-fill"></i>
+                                <button class="avatar-edit-btn" data-bs-toggle="modal" data-bs-target="#avatarModal">
+                                    <i class="bi bi-camera-fill"></i>
+                                </button>
+                            </div>
+                            <h3 class="profile-name">@Model.User.Name</h3>
+                            <p class="profile-username">@@@Model.User.Username</p>
+                            <span class="role-badge">@Model.User.Role.ToString()</span>
+
+                            <div class="profile-stats">
+                                <div class="stat-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <div>
+                                        <strong>Membre depuis</strong>
+                                        <span>@Model.User.DateBirth.Year</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-danger btn-custom w-100 mt-3" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="bi bi-trash me-2"></i>
+                                Supprimer le compte
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Form -->
+                <div class="col-lg-8">
+                    <div class="card form-card">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <i class="bi bi-person-lines-fill me-2"></i>
+                                Informations personnelles
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" asp-page-handler="UpdateProfile">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">
+                                            <i class="bi bi-person"></i>
+                                            Nom complet
+                                        </label>
+                                        <input type="text"
+                                               class="form-control form-control-custom"
+                                               id="name"
+                                               name="Name"
+                                               value="@Model.User.Name"
+                                               required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="username" class="form-label">
+                                            <i class="bi bi-at"></i>
+                                            Nom d'utilisateur
+                                        </label>
+                                        <input type="text"
+                                               class="form-control form-control-custom"
+                                               id="username"
+                                               name="Username"
+                                               value="@Model.User.Username"
+                                               required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">
+                                            <i class="bi bi-envelope"></i>
+                                            Email
+                                        </label>
+                                        <input type="email"
+                                               class="form-control form-control-custom"
+                                               id="email"
+                                               name="Email"
+                                               value="@Model.User.Email"
+                                               required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label">
+                                            <i class="bi bi-telephone"></i>
+                                            Téléphone
+                                        </label>
+                                        <input type="tel"
+                                               class="form-control form-control-custom"
+                                               id="phone"
+                                               name="Phone"
+                                               value="@Model.User.Phone"
+                                               pattern="\d{10}"
+                                               required>
+                                        <small class="form-text text-muted">Format: 10 chiffres</small>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="datebirth" class="form-label">
+                                            <i class="bi bi-calendar-heart"></i>
+                                            Date de naissance
+                                        </label>
+                                        <input type="date"
+                                               class="form-control form-control-custom"
+                                               id="datebirth"
+                                               name="DateBirth"
+                                               value="@Model.User.DateBirth.ToString("yyyy-MM-dd")"
+                                               required>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="role" class="form-label">
+                                            <i class="bi bi-shield-check"></i>
+                                            Rôle
+                                        </label>
+                                        <select class="form-select form-control-custom" id="role" name="Role" disabled>
+                                            <option value="@Model.User.Role" selected>@Model.User.Role.ToString()</option>
+                                        </select>
+                                        <small class="form-text text-muted">Le rôle ne peut pas être modifié</small>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary btn-custom">
+                                        <i class="bi bi-check-circle me-2"></i>
+                                        Enregistrer les modifications
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-secondary btn-custom-outline">
+                                        <i class="bi bi-x-circle me-2"></i>
+                                        Annuler
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Change Password Card -->
+                    <div class="card form-card mt-4">
+                        <div class="card-header">
+                            <h4 class="card-title">
+                                <i class="bi bi-key-fill me-2"></i>
+                                Changer le mot de passe
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" asp-page-handler="ChangePassword">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="currentPassword" class="form-label">
+                                            <i class="bi bi-lock"></i>
+                                            Mot de passe actuel
+                                        </label>
+                                        <div class="password-input-wrapper">
+                                            <input type="password"
+                                                   class="form-control form-control-custom"
+                                                   id="currentPassword"
+                                                   name="CurrentPassword"
+                                                   required>
+                                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('currentPassword')">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="newPassword" class="form-label">
+                                            <i class="bi bi-lock-fill"></i>
+                                            Nouveau mot de passe
+                                        </label>
+                                        <div class="password-input-wrapper">
+                                            <input type="password"
+                                                   class="form-control form-control-custom"
+                                                   id="newPassword"
+                                                   name="Password"
+                                                   required>
+                                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('newPassword')">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label for="confirmPassword" class="form-label">
+                                            <i class="bi bi-lock-fill"></i>
+                                            Confirmer le mot de passe
+                                        </label>
+                                        <div class="password-input-wrapper">
+                                            <input type="password"
+                                                   class="form-control form-control-custom"
+                                                   id="confirmPassword"
+                                                   name="ConfirmPassword"
+                                                   required>
+                                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirmPassword')">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="password-requirements">
+                                    <p class="mb-2"><strong>Le mot de passe doit contenir:</strong></p>
+                                    <ul>
+                                        <li>Au moins 8 caractères</li>
+                                        <li>Une lettre majuscule et une minuscule</li>
+                                        <li>Un chiffre</li>
+                                        <li>Un caractère spécial</li>
+                                    </ul>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary btn-custom">
+                                        <i class="bi bi-shield-lock me-2"></i>
+                                        Changer le mot de passe
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Avatar Modal -->
+<div class="modal fade" id="avatarModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-custom">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-camera me-2"></i>
+                    Changer la photo de profil
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Cette fonctionnalité sera bientôt disponible.</p>
+                <i class="bi bi-image" style="font-size: 4rem; color: #667eea;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-custom">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Êtes-vous sûr de vouloir supprimer votre compte?</p>
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    Cette action est irréversible. Toutes vos données seront définitivement supprimées.
+                </div>
+                <form method="post" asp-page-handler="DeleteAccount">
+                    <div class="mb-3">
+                        <label for="deleteConfirm" class="form-label">
+                            Tapez votre nom d'utilisateur pour confirmer:
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               id="deleteConfirm"
+                               name="UsernameConfirm"
+                               placeholder="@Model.User.Username"
+                               required>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger flex-fill">
+                            <i class="bi bi-trash me-2"></i>
+                            Supprimer définitivement
+                        </button>
+                        <button type="button" class="btn btn-secondary flex-fill" data-bs-dismiss="modal">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function togglePasswordVisibility(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = input.parentElement.querySelector('.password-toggle i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+
+    // Password strength indicator
+    const passwordInput = document.getElementById('newPassword');
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            // Add password strength logic here
+        });
+    }
+</script>
+
+<style>
+    /* Import styles from previous dashboard */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #2c3e50;
+    }
+
+    /* ==================== Sidebar (Reuse from dashboard) ==================== */
+    .sidebar {
+        width: 260px;
+        background: #ffffff;
+        border-right: 1px solid #e9ecef;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .sidebar-header {
+        padding: 2rem 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .user-avatar {
+        margin-bottom: 1rem;
+    }
+
+    .avatar-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .user-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .user-role {
+        font-size: 0.875rem;
+        color: #6c757d;
+        display: block;
+    }
+
+    .sidebar-nav {
+        padding: 1rem 0.75rem;
+        flex: 1;
+    }
+
+        .sidebar-nav .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #6c757d;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+            .sidebar-nav .nav-link i {
+                font-size: 1.25rem;
+                margin-right: 0.75rem;
+                width: 24px;
+            }
+
+            .sidebar-nav .nav-link:hover {
+                background-color: #f8f9fa;
+                color: #667eea;
+            }
+
+            .sidebar-nav .nav-link.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+
+    .logout-link {
+        color: #dc3545 !important;
+        margin-top: auto;
+    }
+
+        .logout-link:hover {
+            background-color: #fff5f5 !important;
+        }
+
+    /* ==================== Main Content ==================== */
+    .main-content {
+        flex: 1;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+    }
+
+    .content-wrapper {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* ==================== Page Header ==================== */
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    /* ==================== Profile Card ==================== */
+    .profile-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .profile-avatar-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 3.5rem;
+        position: relative;
+    }
+
+    .avatar-edit-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #667eea;
+        color: #667eea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .avatar-edit-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+    .profile-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+
+    .profile-username {
+        color: #6c757d;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .profile-stats {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+        .stat-item i {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .stat-item div {
+            text-align: left;
+        }
+
+        .stat-item strong {
+            display: block;
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .stat-item span {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+    /* ==================== Form Card ==================== */
+    .form-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+        .form-card .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            padding: 1.25rem 1.5rem;
+        }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+        .card-title i {
+            color: #667eea;
+        }
+
+    .form-card .card-body {
+        padding: 2rem;
+    }
+
+    /* ==================== Form Styles ==================== */
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+        .form-label i {
+            color: #667eea;
+        }
+
+    .form-control-custom {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+        .form-control-custom:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+    .form-select.form-control-custom:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+
+    .password-input-wrapper {
+        position: relative;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #6c757d;
+        cursor: pointer;
+        padding: 0.25rem;
+        transition: color 0.3s ease;
+    }
+
+        .password-toggle:hover {
+            color: #667eea;
+        }
+
+    .password-requirements {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+        .password-requirements ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            color: #6c757d;
+        }
+
+        .password-requirements li {
+            margin-bottom: 0.25rem;
+        }
+
+    /* ==================== Buttons ==================== */
+    .btn-custom {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary.btn-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+        .btn-primary.btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+    .btn-danger.btn-custom {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: none;
+    }
+
+    .btn-custom-outline {
+        border: 2px solid #e9ecef;
+        color: #6c757d;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-custom-outline:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    /* ==================== Alerts ==================== */
+    .alert-custom {
+        border-radius: 10px;
+        border: none;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* ==================== Modal ==================== */
+    .modal-custom .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.25rem 1.5rem;
+    }
+
+        .modal-custom .modal-header.bg-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+        }
+
+    .modal-custom .modal-title {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
+    .modal-custom .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    /* ==================== Responsive ==================== */
+    
+</style>

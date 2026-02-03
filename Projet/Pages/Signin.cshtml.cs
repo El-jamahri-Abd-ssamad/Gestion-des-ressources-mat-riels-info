@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Projet.Data;
 using Projet.Domain;
-using Projet.Domain.Enums;
-using Projet.Entities;
+using Projet.Domain.enums;
 using Projet.Models;
 using Projet.Security;
 using Projet.Services;
-using System;
-using static System.Collections.Specialized.BitVector32;
 using AppContext = Projet.Security.AppContext;
 
 namespace Projet.Pages
@@ -15,8 +13,7 @@ namespace Projet.Pages
     public class SignInModel : PageModel
     {
         [BindProperty]
-        public UserDto Input { get; set; }   // Username et Password
-
+        public UserDto Input { get; set; }
         public string ErrorMessage { get; set; }
 
         IUserService service = new UserService();
@@ -27,33 +24,28 @@ namespace Projet.Pages
 
         public IActionResult OnPost()
         {
-            // récupérer l'utilisateur depuis la DB
             User user = service.Login(Input.Username, Input.Password);
-
             if (user == null)
             {
                 ErrorMessage = "Nom d'utilisateur ou mot de passe incorrect.";
                 return Page();
             }
 
-            // ?? Stockage global (sans session)
             AppContext.Username = user.Account.Username;
             AppContext.Role = (Role)user.Account.Role;
 
-            Console.WriteLine($"Utilisateur connecté : {AppContext.Username} | RôleId={(int)AppContext.Role} | RôleEnum={AppContext.Role}");
-            // ?? Redirection selon le rôle
+            // récupérer l'ID
+            AppContext.UserId = service.GetUserIdByUsername(user.Account.Username);
+            Console.WriteLine($"LOGIN => UserId = {AppContext.UserId}, Username = {AppContext.Username}");
+
             return AppContext.Role switch
             {
-                Role.Admin => RedirectToPage("/Admin/Dashboard"),
+                Role.Admin => RedirectToPage("/Tenders/Index"),
                 Role.ChefDepartement => RedirectToPage("/ChefDepartement/Index"),
                 Role.Enseignant => RedirectToPage("/Enseignant/Dashboard"),
                 Role.Fournisseur => RedirectToPage("/Suppliers/Dashboard"),
                 Role.Technicien => RedirectToPage("/Maintenance/CreateReport"),
-                Role.ResponsableRessources => RedirectToPage("/Resources/ManageComputers"),
-                
-
-
-                _ => RedirectToPage("/Welcome")
+                _ => RedirectToPage("/Index")
             };
         }
     }

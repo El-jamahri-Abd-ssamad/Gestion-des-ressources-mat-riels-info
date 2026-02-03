@@ -1,0 +1,109 @@
+﻿@page
+@model Projet.Pages.ChefDepartement.ModifierBesoinModel
+@{
+    ViewData["Title"] = "Modifier un Besoin";
+}
+
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li><a href="/ChefDepartement/Index">Dashboard</a></li>
+            <li><a href="/SignIn">Déconnexion</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <h1>Modifier le besoin</h1>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <p style="color:red;">@Model.Message</p>
+        }
+
+        <form method="post">
+            <input type="hidden" asp-for="Besoin.Code" />
+
+            <div>
+                <label>Type de ressource :</label>
+                <input asp-for="Besoin.TypeRessource" required />
+            </div>
+
+            <div>
+                <label>Description :</label>
+                <textarea asp-for="Besoin.Description" rows="3" required></textarea>
+            </div>
+
+            <div>
+                <label>Quantité :</label>
+                <input type="number" asp-for="Besoin.Quantite" min="1" required />
+            </div>
+
+            <div style="margin-top:10px;">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a href="/ChefDepartement/Index" class="btn btn-secondary">Annuler</a>
+            </div>
+        </form>
+    </main>
+</div>
+
+<style>
+    .dashboard-container {
+        display: flex;
+        font-family: Arial;
+    }
+
+    .sidebar {
+        width: 220px;
+        background: #2c3e50;
+        color: white;
+        padding: 20px;
+        height: 100vh;
+    }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            .sidebar ul li {
+                margin: 15px 0;
+            }
+
+                .sidebar ul li a {
+                    color: white;
+                    text-decoration: none;
+                }
+
+    .main-content {
+        flex: 1;
+        padding: 20px;
+    }
+
+    form div {
+        margin-bottom: 10px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 6px;
+        box-sizing: border-box;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        color: white;
+        margin-right: 5px;
+    }
+
+    .btn-primary {
+        background-color: #2980b9;
+    }
+
+    .btn-secondary {
+        background-color: #7f8c8d;
+    }
+</style>

@@ -22,6 +22,11 @@ namespace Projet.Data
             }
         }
 
+        public int GetAccountIdByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
         public User GetUser(string username)
         {
             foreach (var item in liste)
@@ -30,6 +35,11 @@ namespace Projet.Data
                     return item;
             }
             return null;
+        }
+
+        public int GetUserIdByUsername(string? name)
+        {
+            throw new NotImplementedException();
         }
 
         public List<User> GetUsers()

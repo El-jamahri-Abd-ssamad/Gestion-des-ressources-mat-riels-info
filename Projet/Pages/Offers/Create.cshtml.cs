@@ -16,35 +16,23 @@ namespace Projet.Pages.Offers
 
         public void OnGet(int tenderId)
         {
-            TenderId = tenderId;
-            // Valeur par défaut pour éviter l'erreur "The Status field is required"
             Offer = new OfferDto
             {
-                Status = "Pending"
+                TenderId = tenderId
             };
         }
 
-        public IActionResult OnPost(int tenderId)
+        public IActionResult OnPost()
         {
             Console.WriteLine("ON POST CREATE OFFER");
 
             if (!ModelState.IsValid)
             {
                 Console.WriteLine("MODEL STATE INVALID");
-
-                foreach (var entry in ModelState)
-                {
-                    foreach (var error in entry.Value.Errors)
-                    {
-                        Console.WriteLine($"ERROR {entry.Key} : {error.ErrorMessage}");
-                    }
-                }
-
-                return Page(); 
+                return Page();
             }
 
             int supplierId = 1; // temporaire
-            Offer.TenderId = tenderId;
 
             Offer.WarrantyMonths = 0;
 
@@ -54,5 +42,6 @@ namespace Projet.Pages.Offers
 
             return RedirectToPage("/Suppliers/Dashboard");
         }
+
     }
 }

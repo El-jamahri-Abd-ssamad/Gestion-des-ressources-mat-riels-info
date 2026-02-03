@@ -1,0 +1,23 @@
+﻿@page
+@model Projet.Pages.Offers.CreateModel
+
+<h2>Soumettre une offre</h2>
+
+<form method="post">
+
+    <input asp-for="Offer.TenderId" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="Offer.TotalPrice"></label>
+        <input asp-for="Offer.TotalPrice" class="form-control" />
+        <span asp-validation-for="Offer.TotalPrice" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Soumettre
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
