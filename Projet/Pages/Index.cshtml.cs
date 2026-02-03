@@ -17,7 +17,9 @@ namespace Projet.Pages
                 Role.Fournisseur => RedirectToPage("/Suppliers/Dashboard"),
                 Role.ChefDepartement => RedirectToPage("/ChefDepartement/Index"),
                 Role.Technicien => RedirectToPage("/Maintenance/CreateReport"),
-                Role.ResponsableRessources => RedirectToPage("/Resources/ManageComputers"),
+              //  Role.ResponsableRessources => RedirectToPage("/Resources/ManageComputers"),
+                Role.ResponsableRessources => RedirectToPage("/ResponsableRessources/Index"),
+
                 _ => Page()
             };
         }

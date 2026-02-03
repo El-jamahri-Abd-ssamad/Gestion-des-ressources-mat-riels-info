@@ -18,7 +18,7 @@ namespace Projet.Pages
         public List<Notification> Notifications { get; set; } = new List<Notification>();
 
         public void OnGet() =>
-            // Exemple : afficher uniquement les notifications du rôle Responsable
+            // Exemple : afficher uniquement les notifications du rÃ´le Responsable
             Notifications = _notificationService.GetAllNotifications(Role.ResponsableRessources);
     }
 }

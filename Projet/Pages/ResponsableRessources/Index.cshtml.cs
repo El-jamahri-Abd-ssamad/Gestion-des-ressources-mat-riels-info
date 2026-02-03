@@ -13,7 +13,7 @@ namespace Projet.Pages.ResponsableRessources
         private readonly IBesoinDao _besoinDao;
         private readonly INotificationDao _notificationDao;
 
-        // Liste des besoins envoyés
+        // Liste des besoins envoyÃ©s
         public List<BesoinViewModel> BesoinsEnvoyes { get; set; } = new List<BesoinViewModel>();
 
         // Notifications pour le responsable
@@ -29,15 +29,15 @@ namespace Projet.Pages.ResponsableRessources
         }
 
         // =========================
-        // OnGet : récupérer besoins et notifications
+        // OnGet : rÃ©cupÃ©rer besoins et notifications
         // =========================
         public void OnGet()
         {
-            // Récupérer les notifications
+            // RÃ©cupÃ©rer les notifications
             Notifications = _notificationDao.GetNotifications(Role.ResponsableRessources)
                              ?? new List<Notification>();
 
-            // Récupérer les besoins envoyés
+            // RÃ©cupÃ©rer les besoins envoyÃ©s
             var besoins = _besoinDao.GetBesoinsEnvoyes() ?? new List<Besoin>();
 
             // Mapper vers la view model
@@ -49,7 +49,7 @@ namespace Projet.Pages.ResponsableRessources
                 Quantite = b.Quantite,
                 Statut = b.Statut,
                 AppelOffreId = b.AppelOffreId,
-                NomDepartement = "Inconnu" // plus tard on pourra récupérer via DepartementDao
+                NomDepartement = "Inconnu" // plus tard on pourra rÃ©cupÃ©rer via DepartementDao
             }).ToList();
         }
     }
