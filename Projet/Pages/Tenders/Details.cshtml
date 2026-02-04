@@ -1,47 +1,57 @@
 ﻿@page "{id:int}"
 @model Projet.Pages.Tenders.DetailsModel
 
-<h2>@Model.Tender.Title</h2>
+<h2 class="mb-3">@Model.Tender.Title</h2>
 
-<p>Statut : <strong>@Model.Tender.Status</strong></p>
+<p>
+    📅 <strong>Période :</strong>
+    @Model.Tender.StartDate?.ToShortDateString()
+    →
+    @Model.Tender.EndDate?.ToShortDateString()
+</p>
 
-@if (Model.IsSupplier && Model.CanSubmitOffer)
+<p>
+    📌 <strong>Statut :</strong>
+    <span class="badge bg-secondary">@Model.Tender.Status</span>
+</p>
+
+<hr />
+
+<h4 class="mt-4">📄 Offres reçues</h4>
+
+@if (!Model.Offers.Any())
 {
-    <a asp-page="/Offers/Create"
-       asp-route-tenderId="@Model.Tender.Id"
-       class="btn btn-success">
-        Soumettre une offre
-    </a>
+    <p class="text-muted">Aucune offre soumise.</p>
 }
-
-
-@if (Model.IsAdmin)
+else
 {
-    <h4>📄 Offres reçues</h4>
-
-    <table class="table">
-        <tr>
-            <th>Fournisseur</th>
-            <th>Prix</th>
-            <th>Statut</th>
-        </tr>
-
-        @foreach (var o in Model.Offers)
-        {
+    <table class="table table-hover">
+        <thead class="table-light">
             <tr>
-                <td>@o.SupplierId</td>
-                <td>@o.TotalPrice</td>
-                <td>@o.Status</td>
+                <th>Fournisseur</th>
+                <th>Prix</th>
+                <th>Statut</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var o in Model.Offers)
+            {
+                <tr>
+                    <td>@o.SupplierId</td>
+                    <td>@o.TotalPrice</td>
+                    <td>@o.Status</td>
+                </tr>
+            }
+        </tbody>
     </table>
 
-    @if (Model.Offers.Any())
-    {
-        <form method="post">
-            <button class="btn btn-danger">
-                🏆 Sélectionner le moins disant
-            </button>
-        </form>
-    }
+    <form method="post" class="mt-3">
+        <button class="btn btn-danger">
+            🏆 Sélectionner le moins disant
+        </button>
+    </form>
 }
+
+<a asp-page="Index" class="btn btn-secondary mt-4">
+    ⬅ Retour
+</a>

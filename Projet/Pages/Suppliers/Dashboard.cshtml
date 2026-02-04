@@ -1,25 +1,39 @@
 @page
 @model Projet.Pages.Suppliers.DashboardModel
 
-<h2>📦 Mes offres</h2>
+<h3 class="text-center text-primary mb-4">
+    📦 Mes offres
+</h3>
 
-<table class="table">
-    <tr>
-        <th>Appel d’offre</th>
-        <th>Prix</th>
-        <th>Statut</th>
-    </tr>
+<div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body p-4">
 
-    @foreach (var o in Model.Offers)
-    {
-        <tr>
-            <td>@o.TenderId</td>
-            <td>@o.TotalPrice</td>
-            <td>@o.Status</td>
-        </tr>
-    }
-</table>
+        <table class="table table-striped align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th>Appel d’offre</th>
+                    <th>Prix</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var o in Model.Offers)
+                {
+                    <tr>
+                        <td>@o.TenderId</td>
+                        <td>@o.TotalPrice</td>
+                        <td>@o.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-<a asp-page="Tenders" class="btn btn-secondary">
-    ⬅ Retour au Appels d’offres
-</a>
+        <div class="text-center mt-4">
+            <a asp-page="Tenders/Tenders"
+               class="btn btn-outline-secondary rounded-pill px-4">
+                ⬅ Voir les appels d’offres
+            </a>
+        </div>
+
+    </div>
+</div>

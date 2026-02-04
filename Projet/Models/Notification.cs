@@ -1,4 +1,5 @@
-﻿using Projet.Domain.Enums; // pour Role
+﻿using Projet.Domain.enums;
+using Projet.Domain.Enums; // pour Role
 using System;
 
 namespace Projet.Models

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Projet.Models;
 using Projet.Services;
-using Projet.Domain.Enums; // Pour Role
+using Projet.Domain.enums; // Pour Role
 using System;
 
 namespace Projet.Pages.Resources

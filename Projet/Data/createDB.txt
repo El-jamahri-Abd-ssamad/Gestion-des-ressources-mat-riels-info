@@ -45,6 +45,8 @@ CREATE TABLE Notification (
     EstLue BIT,
     RoleCible INT
 );
+ALTER TABLE Departement
+ADD ChefUsername NVARCHAR(100);
 
 //dev3
 

@@ -1,0 +1,63 @@
+﻿@page "{id:int}"
+@model Projet.Pages.Suppliers.Tenders.DetailsModel
+
+<h2 class="mb-3">@Model.Tender.Title</h2>
+
+<p>
+    📅 <strong>Période :</strong>
+    @Model.Tender.StartDate?.ToShortDateString()
+    →
+    @Model.Tender.EndDate?.ToShortDateString()
+</p>
+
+<p>
+    📌 <strong>Statut :</strong>
+    <span class="badge bg-info">@Model.Tender.Status</span>
+</p>
+
+<hr />
+
+@if (Model.CanSubmitOffer)
+{
+    @if (!Model.Offers.Any())
+    {
+        <p class="text-muted">Aucune offre soumise.</p>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Fournisseur</th>
+                    <th>Prix</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var o in Model.Offers)
+                {
+                    <tr>
+                        <td>@o.SupplierId</td>
+                        <td>@o.TotalPrice</td>
+                        <td>@o.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <a asp-page="/Offers/Create"
+       asp-route-tenderId="@Model.Tender.Id"
+       class="btn btn-success">
+        ➕ Soumettre une offre
+    </a>
+}
+else
+{
+    <p class="text-muted">
+        Vous avez déjà soumis une offre ou l’appel est clôturé.
+    </p>
+}
+
+<a asp-page="/Index" class="btn btn-secondary mt-3">
+    ⬅ Retour aux appels d’offres
+</a>

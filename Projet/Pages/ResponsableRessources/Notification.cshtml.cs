@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Projet.Services;
 using Projet.Models;
-using Projet.Domain.Enums;
+using Projet.Domain.enums;
 using System.Collections.Generic;
 
 namespace Projet.Pages
@@ -18,7 +18,7 @@ namespace Projet.Pages
         public List<Notification> Notifications { get; set; } = new List<Notification>();
 
         public void OnGet() =>
-            // Exemple : afficher uniquement les notifications du rôle Responsable
+            // Exemple : afficher uniquement les notifications du rÃ´le Responsable
             Notifications = _notificationService.GetAllNotifications(Role.ResponsableRessources);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Projet.Models;
-using Projet.Domain.Enums;
+using Projet.Domain.enums;
 using System.Collections.Generic;
 
 namespace Projet.Services

@@ -18,4 +18,9 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\ResponsableRessources\" />
+    <Folder Include="Pages\Resources\" />
+  </ItemGroup>
+
 </Project>

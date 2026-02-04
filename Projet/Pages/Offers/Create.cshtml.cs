@@ -8,18 +8,13 @@ namespace Projet.Pages.Offers
     public class CreateModel : PageModel
     {
         [BindProperty]
-        public OfferDto Offer { get; set; }
+        public OfferDto Offer { get; set; } = new OfferDto();
 
         IOfferService service = new OfferService();
 
-        public int TenderId { get; set; }
-
         public void OnGet(int tenderId)
         {
-            Offer = new OfferDto
-            {
-                TenderId = tenderId
-            };
+            Offer.TenderId = tenderId;
         }
 
         public IActionResult OnPost()
@@ -28,12 +23,17 @@ namespace Projet.Pages.Offers
 
             if (!ModelState.IsValid)
             {
-                Console.WriteLine("MODEL STATE INVALID");
+                foreach (var entry in ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        Console.WriteLine($"FIELD: {entry.Key} | ERROR: {error.ErrorMessage}");
+                    }
+                }
                 return Page();
             }
 
             int supplierId = 1; // temporaire
-
             Offer.WarrantyMonths = 0;
 
             service.CreateOffer(supplierId, Offer);
@@ -42,6 +42,6 @@ namespace Projet.Pages.Offers
 
             return RedirectToPage("/Suppliers/Dashboard");
         }
-
     }
+
 }
