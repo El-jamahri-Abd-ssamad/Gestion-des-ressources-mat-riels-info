@@ -1,28 +1,38 @@
 ﻿@page
 @model Projet.Pages.Blacklist.IndexModel
 
-<h2>🚫 Liste noire des fournisseurs</h2>
+<h3 class="text-center text-danger mb-4">
+    🚫 Liste noire des fournisseurs
+</h3>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Fournisseur</th>
-            <th>Date</th>
-            <th>Motif</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var b in Model.Blacklist)
-        {
-            <tr>
-                <td>@b.IdSupplier</td>
-                <td>@b.Date.ToShortDateString()</td>
-                <td>@b.Reason</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body p-4">
 
-<a asp-page="Create" class="btn btn-danger">
-    ➕ Ajouter à la blacklist
-</a>
+        <table class="table align-middle table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Fournisseur</th>
+                    <th>Date</th>
+                    <th>Motif</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model.Blacklist)
+                {
+                    <tr>
+                        <td>@b.IdSupplier</td>
+                        <td>@b.Date.ToShortDateString()</td>
+                        <td>@b.Reason</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-end mt-3">
+            <a asp-page="Create" class="btn btn-danger rounded-pill px-4">
+                ➕ Ajouter à la blacklist
+            </a>
+        </div>
+
+    </div>
+</div>

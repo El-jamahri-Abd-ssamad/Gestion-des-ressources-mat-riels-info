@@ -1,0 +1,55 @@
+﻿@page
+@model Projet.Pages.Suppliers.TendersModel
+
+<h3 class="text-center text-info mb-4">
+    📢 Appels d’offres disponibles
+</h3>
+
+<div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body p-4">
+
+        <table class="table table-hover align-middle">
+            <thead class="table-info">
+                <tr>
+                    <th>Titre</th>
+                    <th>Début</th>
+                    <th>Fin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var t in Model.Tenders)
+                {
+                    <tr>
+                        <td>@t.Title</td>
+                        <td>@t.StartDate?.ToShortDateString()</td>
+                        <td>@t.EndDate?.ToShortDateString()</td>
+                        <td>
+                            <a asp-page="Details"
+                               asp-route-id="@t.Id"
+                               class="btn btn-outline-primary btn-sm rounded-pill">
+                                Détails
+                            </a>
+
+                            <a asp-page="/Offers/Create"
+                               asp-route-tenderId="@t.Id"
+                               class="btn btn-success btn-sm rounded-pill ms-2">
+                                Soumettre
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="text-center mt-4">
+            <a asp-page="/Suppliers/Dashboard"
+               class="btn btn-outline-secondary rounded-pill px-4">
+                ⬅ Retour au dashboard
+            </a>
+        </div>
+
+    </div>
+</div>
+

@@ -13,7 +13,7 @@ namespace Projet.Models
         [Range(1, double.MaxValue)]
         public decimal TotalPrice { get; set; }
         public int WarrantyMonths { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         // pour détailler l’offre
         public List<OfferItemDto> Items { get; set; } = new List<OfferItemDto>();

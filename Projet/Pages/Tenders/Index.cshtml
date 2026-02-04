@@ -1,41 +1,57 @@
 @page
 @model Projet.Pages.Tenders.IndexModel
 
-<h2>📢 Appels d’offres</h2>
+<h3 class="text-center text-primary mb-4">
+    📢 Appels d’offres
+</h3>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Titre</th>
-            <th>Période</th>
-            <th>Statut</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var t in Model.Tenders)
+<div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body p-4">
+
+        <table class="table table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Titre</th>
+                    <th>Période</th>
+                    <th>Statut</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var t in Model.Tenders)
+                {
+                    <tr>
+                        <td>@t.Title</td>
+                        <td>@t.StartDate?.ToShortDateString() - @t.EndDate?.ToShortDateString()</td>
+                        <td>@t.Status</td>
+                        <td>
+                            <a asp-page="Details"
+                               asp-route-id="@t.Id"
+                               class="btn btn-primary btn-sm rounded-pill">
+                                Détails
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (Model.IsAdmin)
         {
-            <tr>
-                <td>@t.Title</td>
-                <td>@t.StartDate?.ToShortDateString() - @t.EndDate?.ToShortDateString()</td>
-                <td>@t.Status</td>
-                <td>
-                    <a asp-page="Details" asp-route-id="@t.Id" class="btn btn-primary">
-                        Détails
-                    </a>
-                </td>
-            </tr>
+            <div class="text-center mt-4">
+                <a asp-page="Create"
+                   class="btn btn-success rounded-pill px-4">
+                    ➕ Nouvel appel d’offre
+                </a>
+
+                <a asp-page="/Blacklist/Index"
+                   class="btn btn-outline-danger rounded-pill px-4 ms-2">
+                    🚫 Blacklist
+                </a>
+            </div>
         }
-    </tbody>
-</table>
 
-@if (Model.IsAdmin)
-{
-    <a asp-page="Create" class="btn btn-success">
-        ➕ Nouvel appel d’offre
-    </a>
+    </div>
+</div>
 
-    <a asp-page="/Blacklist/Index" class="btn btn-danger ms-2">
-        🚫 Blacklist
-    </a>
-}

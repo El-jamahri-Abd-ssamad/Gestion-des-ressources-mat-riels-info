@@ -1,15 +1,42 @@
-@page
+﻿@page
 @model Projet.Pages.Offers.CreateModel
 
-<h2>Soumettre une offre</h2>
+<h3 class="text-center text-success mb-4">
+    📝 Soumettre une offre
+</h3>
 
-<form method="post">
-    <input type="hidden" name="tenderId" value="@Model.TenderId" />
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4">
 
-    <div class="mb-3">
-        <label>Prix total</label>
-        <input asp-for="Offer.TotalPrice" class="form-control" />
+                <form method="post">
+
+                    <input asp-for="Offer.TenderId" type="hidden" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary">
+                            Prix total
+                        </label>
+                        <input asp-for="Offer.TotalPrice"
+                               class="form-control rounded-3" />
+                        <span asp-validation-for="Offer.TotalPrice"
+                              class="text-danger"></span>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-success w-100 rounded-pill py-2">
+                        ✅ Soumettre l’offre
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
     </div>
+</div>
 
-    <button class="btn btn-success">Soumettre</button>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
